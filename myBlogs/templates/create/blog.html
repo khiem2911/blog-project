@@ -1,0 +1,30 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
+{% endblock %}
+
+{% block body_block %}
+<h1>Trang Blog</h1>
+<form class="post-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h2>Tạo Bài Viết Mới</h2>
+    <label for="title">Tiêu Đề:</label>
+    <input type="text" id="title" name="title" required>
+    <br>
+    <label for="content">Nội Dung:</label>
+    <textarea id="content" name="content" required></textarea>
+    <br>
+    <label for="imagespost">Hình ảnh:</label>
+    <input type="file" id="imagespost" name="imagespost" required>
+    <br>
+    <label for="visibility">Chế độ:</label>
+    <select id="visibility" name="is_public">
+        <option value="True">Public</option>
+        <option value="False">Không Public</option>
+    </select>
+    <br>
+    <button type="submit">Đăng Bài</button>
+</form>
+{% endblock %}

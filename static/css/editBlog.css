@@ -1,0 +1,56 @@
+/* CSS cho trang editBlog.css */
+
+/* Định dạng khung nội dung */
+.edit-post-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Định dạng phần tử h2 (Tiêu đề) */
+h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+/* Định dạng nút "Lưu" */
+input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px;   
+}
+
+/* Định dạng nút "Lưu" khi di chuột qua */
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Định dạng label và input */
+label,
+input[type="text"],
+textarea {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Định dạng textarea */
+textarea {
+    resize: vertical;
+}
+/* Định dạng ảnh*/
+img{
+    max-width: 600px;
+}

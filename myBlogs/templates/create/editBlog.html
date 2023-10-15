@@ -1,0 +1,26 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/editBlog.css' %}">
+{% endblock %}
+
+{% block body_block %}
+<div class="edit-post-form">
+    <h2>Chỉnh Sửa Bài Viết</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="{{ form.title.id_for_label }}">Tiêu Đề:</label>
+        {{ form.title }}
+        
+        <label for="{{ form.content.id_for_label }}">Nội Dung:</label>
+        {{ form.content }}
+        <label for="{{ form.imagespost.id_for_label }}">Hình ảnh:</label>
+        <img src="/media/{{ post.imagespost }}" alt="">
+        {{ form.imagespost }}
+        {{form.is_public}}
+        <br>
+        <input type="submit" value="Lưu">
+    </form>
+</div>
+{% endblock %}

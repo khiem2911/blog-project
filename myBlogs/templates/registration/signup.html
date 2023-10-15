@@ -1,0 +1,18 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+{% block body_block %}
+<div class="container">
+
+<h2>Đăng ký</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Đăng ký</button>
+</form>
+</div>
+
+{% endblock %}

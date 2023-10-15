@@ -1,0 +1,21 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block body_block %}
+<div class="container">
+    <h2>Đăng nhập</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="{{ form.username.id_for_label }}">Tên người dùng:</label>
+        {{ form.username }}
+        
+        <label for="{{ form.password.id_for_label }}">Mật khẩu:</label>
+        {{ form.password }}
+        
+        <button type="submit">Đăng nhập</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+
+/* Định dạng khung chứa biểu mẫu đăng nhập */
+.container {
+    max-width: 300px;
+    margin: 2rem auto;
+    padding: 20px 25px 20px 25px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Định dạng phần tử h2 (Tiêu đề "Đăng nhập") */
+h2 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+}
+
+/* Định dạng các phần tử input và label trong form */
+form input,
+form label {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Định dạng nút Đăng nhập */
+form button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Định dạng nút Đăng nhập khi di chuột qua */
+form button:hover {
+    background-color: #0056b3;
+}

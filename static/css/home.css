@@ -1,0 +1,49 @@
+
+    .header {
+        color: #fff;
+        padding: 10px; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-image: url("https://www.freewebheaders.com/wp-content/gallery/beautiful-landscape/cache/mountain-lake-purple-sunset-landscape-website-header.jpg-nggid043199-ngg0dyn-1280x720x100-00f0w010c010r110f110r010t010.jpg");
+    }
+
+    .header .title a{
+        font-size: 50px;
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+        text-decoration: none;
+    }
+    .header .title a:hover{
+        text-decoration: none;
+        color: rgb(113, 250, 255);;
+    }
+
+    .nav a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 20px;
+    }
+
+    .login-button {
+        background-color: #007bff;
+        padding: 10px 15px;
+        border-radius: 5px;
+    }
+
+    .signup-button {
+        background-color: #28a745;
+        padding: 10px 15px;
+        border-radius: 5px;
+    }
+
+    .logout-button {
+        background-color: #dc3545;
+        padding: 10px 15px;
+        border-radius: 5px;
+    }
+    .nav .myBlog-button {
+        background-color: red !important;
+        padding: 10px 15px;
+        border-radius: 5px;
+    }

@@ -1,0 +1,89 @@
+/* Định dạng khung chứa danh sách bài viết */
+.post-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Định dạng phần tử h2 (Tiêu đề bài viết) */
+.post h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+/* Định dạng nội dung bài viết */
+.post p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Định dạng thông tin người đăng và ngày tạo */
+.post .author,
+.post .created-at {
+    font-size: 14px;
+    color: #777;
+}
+
+/* Định dạng tiêu đề "Bình luận" */
+.post h3 {
+    font-size: 20px;
+    color: #333;
+}
+
+/* Định dạng danh sách bình luận */
+.post .comment {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Định dạng biểu mẫu bình luận */
+.comment-form {
+    margin-top: 20px;
+}
+
+/* Định dạng nút "Thêm bình luận" */
+.comment-form button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Định dạng nút "Thêm bình luận" khi di chuột qua */
+.comment-form button:hover {
+    background-color: #0056b3;
+
+}
+
+/* Định dạng textarea */
+.comment-form textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: vertical; /* Cho phép thay đổi kích thước theo chiều dọc */
+}
+
+/* Định dạng khung danh sách bài viết */
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+/* Định dạng comments */
+.hide-comments {
+    display: none;
+}
+
+.show-more-link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}

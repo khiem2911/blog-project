@@ -1,0 +1,57 @@
+/* CSS cho trang myBlogs.html */
+
+/* Định dạng khung nội dung */
+.post-list {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Định dạng phần tử h2 (Tiêu đề) */
+h2 {
+    font-size: 24px;
+    color: #333;
+}
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Định dạng nội dung bài viết */
+.post p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Định dạng các phần tử p trong phần thông tin bài viết (Người đăng, Ngày tạo) */
+.post .author,
+.post .created-at {
+    font-size: 14px;
+    color: #777;
+}
+
+/* Định dạng nút "Chỉnh Sửa" và "Xóa" */
+.edit-button,
+.delete-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Định dạng nút "Chỉnh Sửa" và "Xóa" khi di chuột qua */
+.edit-button:hover,
+.delete-button:hover {
+    background-color: #0056b3;
+}
