@@ -1,0 +1,99 @@
+{% extends "header.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/profile.css">
+    <link rel="stylesheet" href="/static/css/friends.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock  %}
+{% block body_block %}
+<div class="container">
+    <div class="profile-page tx-13">
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="profile-header">
+                    <div class="cover">
+                        <div class="gray-shade"></div>
+                        <figure>
+                            {% if userInfos.imgcover %}
+                            <img src="/media/{{ userInfos.imgcover }}" class="img-fluid" alt="profile cover">
+                            {% else %}
+                            <img src="https://bootdey.com/img/Content/bg1.jpg" class="img-fluid" alt="profile cover">
+                            {% endif %}
+                        </figure>
+                        <div class="cover-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <img class="profile-pic" src="/media/{{ userInfos.avatar }}" alt="profile">
+                                <span class="profile-name">{{userInfos.last_name}} {{userInfos.first_name}}</span>
+                            </div>
+                            <div class="d-none d-md-block">
+                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg> {% if request.user != profile_user %}
+                                    {% if request.session.is_following %}
+                                        <a style="color: white; text-decoration:none;" href="{% url 'app_social:follow_user' user_id=userInfos.id %}">Unfollow</a>
+                                    {% else %}
+                                        <a style="color: white; text-decoration:none;" href="{% url 'app_social:follow_user' user_id=userInfos.id %}">Follow</a>
+                                    {% endif %}
+                                {% endif %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-links">
+                        <ul class="links d-flex align-items-center mt-3 mt-md-0">
+                            <li class="header-link-item d-flex align-items-center ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-columns mr-1 icon-md">
+                                    <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18"></path>
+                                </svg>
+                                <a class="pt-1px d-none d-md-block" href="{% url 'app_social:user_profile' userInfos.username %}">Timeline</a>
+                            </li>
+                           
+                            <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users mr-1 icon-md">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                <a class="pt-1px d-none d-md-block" href="{% url 'app_social:user_profileFriends' userInfos.id %}">Friends </a>
+                            </li>
+                            <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center active">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users mr-1 icon-md">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                <a class="pt-1px d-none d-md-block" href="{% url 'app_social:user_profileFollowers' userInfos.id %}">Following </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                {% for follower in followers %}      
+                <div class="col-md-6 col-xl-4">     
+                  <div class="card">
+                                  
+                    <div class="card-body">
+                      <div class="media align-items-center"><img src="/media/{{follower.following.avatar}}" class="avatar avatar-xl mr-3"></img>
+                        <div class="media-body overflow-hidden">
+                          <a href="{% url 'app_social:user_profile' follower.following.username %}" class="card-text mb-0">{{follower.following.last_name}} {{follower.following.first_name}}</a>
+                          <p class="card-text text-uppercase text-muted">{{follower.following.bio}}</p>
+                          <p class="card-text">
+                          {{follower.following.lives}}
+                          </p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+          </div>
+    </div>  
+{% endblock  %}

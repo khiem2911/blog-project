@@ -1,0 +1,364 @@
+/* Các lớp chung */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Khung viết trạng thái */
+  .status-update {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  .dropdown_ {
+    position: relative;
+    display: inline-block;
+    
+  }
+
+  .video-container{
+    display: block;
+}
+.layout-img{
+  width: 100px;
+  height: 100px;
+}
+.img-post{
+  width: 100%;
+  height: auto;
+}
+
+  .video-wrapper {
+    max-width: 300px;
+    width: 100%;
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  video {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
+
+
+  .dropdown_ button{
+    border: none;
+  }
+  
+  #overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+    overflow-y: scroll;
+
+  }
+  .editForm{
+    background-color: white;
+    padding: 10px 50px;
+    
+  }
+  #overlay form {
+    width: auto;
+    height: 100%;
+    padding: 0 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .layout-img{
+    list-style-type: none;
+    margin: -0.1rem;
+    padding: 0; 
+}
+
+
+.wrap_suggestFriends{
+  display: flex;
+  gap: 2rem;
+}
+.member_container{
+  margin-left: 0.5rem;
+  max-height: 30rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+.rounded-image {
+  width: 50px; 
+  height: 50px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+}
+a{
+  text-decoration: none;
+}
+.btn_add{
+  border: none;
+  background-color: #007bff;
+  color: white;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+.btn_friend{
+  border: none;
+  background-color: gray;
+  color: white;
+  padding: 0.25rem;
+  border-radius: 4px;
+  width: 7rem;
+}
+
+.file-upload-label {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.file-upload-label input {
+  position: absolute;
+  left: -9999px;
+}
+
+.file-upload-label i {
+  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #a9a3a3;
+  font-size: 22px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.file-upload-label i:hover {
+  color: #646060;
+}
+
+.wrap_Friends{
+  display: flex;
+  flex-direction: column;
+  width: 30rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+li{
+  list-style: none;
+}
+
+
+
+  #overlay form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  #overlay form h1 {
+    color: #909396;
+    font-size: 27px;
+    border-bottom: 1px solid rgb(152, 144, 144);;
+    margin-bottom: 50px;
+    margin-top: 0;
+  }
+  
+  #overlay form button {
+    width: 100%;
+    height: auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  #overlay form button:hover {
+    background-color: #085fbd;
+  }
+
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  
+  .show {display: block;}
+  
+  .status-form {
+    display: flex;
+    flex-direction: column;
+  }
+  .rounded-image {
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+}
+.flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+  ul{
+    list-style: none;
+  }
+  .status-input {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .status-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Bài viết */
+  .post-item {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .post-author {
+    font-weight: bold;
+  }
+  
+  .post-date {
+    color: #555;
+  }
+  
+  .post-content {
+    margin-bottom: 10px;
+  }
+  
+  /* Bình luận */
+  .comment-item {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .comment-header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .comment-author {
+    font-weight: bold;
+  }
+  
+  .comment-content {
+    margin-bottom: 10px;
+  }
+  
+  /* Phản hồi bình luận */
+  .reply-item {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .reply-author {
+    font-weight: bold;
+  }
+  
+  .reply-text {
+    margin-top: 10px;
+    color: #333;
+  }
+  
+  /* Nút phản hồi */
+  .reply-button {
+    background-color: #3578E5;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .comment-button {
+    background-color: #3578E5;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+
+
+
+  /* Định dạng textarea */
+.comment-textarea {
+    width: 100%; /* Độ rộng của textarea */
+    height: 80px; /* Chiều cao của textarea */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none; /* Ngăn chặn thay đổi kích thước bằng cách kéo thả */
+  }
+  
+  /* Định dạng nút bình luận */
+  .comment-button {
+    width: auto; /* Độ rộng tự động (chia sẻ chiều rộng với nội dung) */
+    padding: 5px 5px; /* Khoảng cách bên trong nút */
+    background-color: #3578E5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  /* Định dạng container của textarea và nút */
+  .comment-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .delete-button {
+    background-color: #E53E3E; /* Màu đỏ hoặc màu bạn chọn cho nút xóa */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 10px; /* Tùy chỉnh padding cho nút */
+    margin-top: 10px; /* Tùy chỉnh khoảng cách từ nút đến bình luận */
+  }

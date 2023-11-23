@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% block extra_css %}
+
+    {% endblock %}
+  </head>
+  <body>
+    {% comment %}Navbar{% endcomment %}
+    
+    <div class="navbar">
+      <div class="container">
+        <a class="navbar_a" href="{% url 'app_social:index' %}"><img src="{% static 'images/logo.png' %}" alt="Logo" width="40px" height="40px"> Nhóm 5</a>
+        <a class="navbar_a" href="{% url 'app_social:index' %}">Trang chủ</a>
+        <a class="navbar_a" href="{% url 'app_social:Pagechat' %}">Trò chuyện</a>
+
+        <form class="search-container" action="{% url 'app_social:result_search' %}" method="get">
+          <input type="text" name="value_search" placeholder="Tìm kiếm..." class="search-box" />
+          <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+        </form>
+        <div class="notification-icon">
+          <i class="fas fa-bell"></i>
+        </div>
+  
+        {% if user.is_authenticated %}
+          <div class="dropdown">
+            <a href="{% url 'app_social:profile' %}"><img class="avatar" src="/media/{{user.avatar}}" alt="Avatar" /></a>
+
+            <div class="dropdown-content">
+              <a href="{% url 'app_social:logout' %}">Đăng xuất</a>
+              <a href="{% url 'app_social:change_password' %}">Đổi mật khẩu</a>
+              <a href="{% url 'app_social:friend_requests' %}">Danh sách lời mời kết bạn</a>
+          
+
+            </div>
+          </div>  
+          <a class="navbar_a_username" href="#">{{user.last_name}} {{user.first_name}}</a>
+          <a class="navbar_a" href="{% url 'app_social:logout' %}">Đăng xuất</a>
+        
+        {% else %}
+          <a class="navbar_a" href="{% url 'app_social:login' %}">Đăng nhập</a>
+          <a class="navbar_a" href="{% url 'app_social:register' %}">Đăng ký</a>
+        {% endif %}
+      </div>
+      </div>
+
+    {% block body_block %}
+
+    {% endblock %}
+    {% block js_block %}
+
+    {% endblock %}
+  </body>
+</html>

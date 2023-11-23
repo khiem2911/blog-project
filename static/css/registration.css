@@ -1,0 +1,65 @@
+/* Thiết lập font và màu chung cho trang */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4e7e7;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Định dạng phần tiêu đề "Register" */
+  h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #1750eb;
+  }
+  
+  /* Định dạng cho form */
+  form {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(7, 24, 255, 0.1);
+  }
+  
+  /* Định dạng cho input fields */
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+  
+  /* Định dạng cho nút "Đăng ký" */
+  input[type="submit"] {
+    width: 100%;
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Định dạng cho liên kết "Đăng nhập" */
+  a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #007BFF;
+  }
+  
+  a:hover {
+    color: #0056b3;
+  }
+  

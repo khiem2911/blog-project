@@ -1,0 +1,92 @@
+.navbar {
+    background-image: url('https://media.licdn.com/dms/image/C4E12AQHO0-NzzwJodQ/article-inline_image-shrink_1500_2232/0/1520222086640?e=1704326400&v=beta&t=kaMBbFoIMLrmtz7XSoQyjNkfwD2YYJlyuTI0b3pruCU');
+    display: flex;
+    background-size: cover;
+    align-items: center;
+}
+.navbar .navbar_a {
+    display: block;
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+    padding-left: 50px;
+}
+.navbar a:hover {
+    color: white;
+}
+.navbar_a_username{
+    color: white;
+    text-decoration: none;
+}
+
+.search-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+.search-box {
+    width: 100%;
+    padding: 8px;
+}
+.search-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+.search-button:hover {
+    background-color: #45a049;
+}
+.notification-icon {
+    float: right;
+    margin-right: 20px;
+}
+.notification-icon i {
+    color: white;
+    font-size: 24px;
+}
+
+/* logout */
+  
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+.dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+.dropdown-content a:hover {
+    background-color: #b7adad;
+    text-decoration: none;
+}
+  
+  /* avatar */
+.navbar a .avatar:hover {
+    box-shadow: 0 0 2px 4px rgba(0, 140, 186, 0.5);
+}   
+.navbar a .avatar{
+    margin-right: 50px;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+}

@@ -1,0 +1,418 @@
+{% extends "header.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="static/css/profile.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% endblock %}
+
+{% block body_block %}
+
+<div class="container">
+    <div class="profile-page tx-13">
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="profile-header">
+                    <div class="cover">
+                        <div class="gray-shade"></div>
+                        <figure>
+                            {% if user.imgcover %}
+                            <img src="/media/{{ user.imgcover }}" class="img-fluid" alt="profile cover">
+                            {% else %}
+                            <img src="https://bootdey.com/img/Content/bg1.jpg" class="img-fluid" alt="profile cover">
+                            {% endif %}
+                        </figure>
+                        <div class="cover-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <img class="profile-pic" src="/media/{{ user.avatar }}" alt="profile">
+                                <span class="profile-name">{{userInfo.last_name}} {{userInfo.first_name}}</span>
+                            </div>
+                            <div class="d-none d-md-block">
+                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg> <a style="color: white; text-decoration:none;"
+                                        href="{% url 'app_social:editProfile' userInfo.id %}">Edit profile</a>
+                                </button>
+                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg> <a style="color: white; text-decoration:none;"
+                                        href="{% url 'app_social:group' %}">Create group</a>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-links">
+                        <ul class="links d-flex align-items-center mt-3 mt-md-0">
+                            <li class="header-link-item d-flex align-items-center active">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-columns mr-1 icon-md">
+                                    <path
+                                        d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18">
+                                    </path>
+                                </svg>
+                                <a class="pt-1px d-none d-md-block" href="#">Timeline</a>
+                            </li>
+
+                            <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-users mr-1 icon-md">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                <a class="pt-1px d-none d-md-block" href="{% url 'app_social:All_friends' %}">Friends
+                                </a>
+                            </li>
+                            <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-users mr-1 icon-md">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                <a class="pt-1px d-none d-md-block"
+                                    href="{% url 'app_social:All_followers' %}">Following </a>
+                            </li>
+                            <li class="header-link-item ml-3 pl-3 border-left d-flex align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-users mr-1 icon-md">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                <a class="pt-1px d-none d-md-block"
+                                    href="{% url 'app_social:blockingFriends' %}">Blocking </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row profile-body">
+
+            <div class="d-none d-md-block col-md-4 col-xl-3 left-wrapper">
+                <div class="card rounded">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="card-title mb-0">About</h6>
+                        </div>
+                        <p>{{userInfo.bio}}</p>
+                        <div class="mt-3">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Joined:</label>
+                            <p class="text-muted">{{userInfo.created_at}}</p>
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Lives:</label>
+                            <p class="text-muted">{{userInfo.lives}}</p>
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Website:</label>
+                            <a href="{{userInfo.website}}" class="text-muted">{{userInfo.website}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-6 middle-wrapper">
+                <div class="row">
+                    {% comment %} Create post {% endcomment %}
+                        <div class="create-pots-profile">
+                            <div class="panel-body">
+                                    <div class="custom-alert">
+                                        <ul>
+                                            {% for message in messages %}
+                                                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                <form action="{% url 'app_social:create_post' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="elements-form">
+                                        <input type="hidden" name="return-profile" value="return-profile">
+                                        <textarea class="form-control" name="content" rows="2" placeholder="What are you thinking?"></textarea>
+                                        <div class="mar-top clearfix">
+                                            <label for="fileInput" class="file-upload-label">
+                                                <input type="file" id="fileInput" name="images" multiple>
+                                                <i class="fa-solid fa-circle-plus"></i>
+                                            </label>
+                                            <label for="videoInput" class="file-upload-label">
+                                                <input type="file" id="videoInput" name="videos" multiple>
+                                                <i class="fa-solid fa-video"></i>
+                                            </label>
+                                            <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-pencil fa-fw"></i>
+                                                Share</button>
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    
+                    {% comment %} Your post{% endcomment %}
+                    {% for post in posts %}
+                    <div class="col-md-12 grid-margin">
+                        <div class="card rounded">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <img class="img-xs rounded-circle" src="/media/{{ post.author.avatar }}" alt="">
+                                        <div class="ml-2">
+                                            {% if post.author != request.user %}
+                                            <p style="font-weight: bold;">{{ post.author.last_name }} {{ post.author.first_name }} to {{request.user.last_name}}{{request.user.first_name}}</p>
+                                            {% else %}
+                                            <p style="font-weight: bold;">{{ post.author.last_name }} {{ post.author.first_name }} </p>
+                                            {% endif %}
+                                            <p class="tx-11 text-muted">{{ post.created_at }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown_">
+                                        <button onclick="myFunction({{ post.id }})" class="dropbtn edit-button"
+                                            data-post-id="{{ post.id }}">...</button>
+                                        <div id="myDropdown-{{ post.id }}" class="dropdown-content">
+                                            {% if post.author == request.user %}
+                                            <a id="editButton" class="edit-link" href="#"
+                                                data-post-id="{{ post.id }}">Edit</a>
+                                                {% endif %}
+                                            <a href="{% url 'app_social:delete_post' post.id %}">Delete</a>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-3 tx-14">{{ post.content }}</p>
+                                    <div class="video-container">
+
+                                        {% for video in post.video.all %}
+                                        <div class="video-wrapper">
+                                            <video controls>
+                                                {% csrf_token %}
+                                                <source src="{{video.video.url}}" type="video/mp4">
+                                            </video>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="layout-img">
+                                        {% for image in post.images.all %}
+                                        <img class="img-post" src="{{ image.image.url }}" alt="Img post">
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer">
+                                    <div class="d-flex post-actions">
+                                        <!-- Like post -->
+                                        {% if post.liked == True %}
+                                        
+                                        <a href="{% url 'app_social:like_post' post.id %}?like_post_in_profile=true"
+                                            class="btn-like text-primary text-opacity-50 text-decoration-none d-block p-2"
+                                            name="like_post_in_profile">
+                                            {{post.likes.count}}<i
+                                                class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
+                                        {% else %}
+                                        <a href="{% url 'app_social:like_post' post.id %}?like_post_in_profile=true"
+                                            class="btn-like text-body text-opacity-50 text-decoration-none d-block p-2"
+                                            name="like_post_in_profile">
+                                            {{post.likes.count}} <i
+                                                class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
+                                        {% endif %}
+                                        <a class="btn-comment" href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2">
+                                            <i class="far fa-comment me-1 d-block d-sm-inline"></i> Comment </a>
+
+
+                                    </div>
+
+
+                                </div>
+                                <hr class="mb-3 mt-1 opacity-1" />
+
+                                {% if user.username %}
+                                {% for comment in comments %}
+                                {% if comment.post.id == post.id %}
+                                <div class="comment">
+                                    <div class="avatar">
+                                        <img src="{{comment.author.avatar.url}}" alt="User Avatar">
+                                    </div>
+                                    <div class="comment-content">
+                                        <h6>{{comment.author.last_name}} {{comment.author.first_name}}</h6>
+                                        <p class="content-comment">{{comment.content}}</p>
+                                        <span class="timestamp">{{comment.created_at}}</span>
+                                        <button class="reply-button">Reply</button>
+                                        <!-- Vùng trả lời ẩn -->
+                                        <div class="reply-form">
+                                            <form action="{% url 'app_social:commentPost' post.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="return_profile" value="return">
+                                                <input type="hidden" name="comment_id" value="{{comment.id}}">
+                                                <textarea required class="reply-textarea" name="text"
+                                                    placeholder="Nhập bình luận của bạn"></textarea>
+                                                <button class="submit-reply" type="submit"
+                                                    name="reply_comment">Send</button>
+                                            </form>
+                                        </div>
+                                         {% comment %} Edit comment {% endcomment %}
+                                         {% if comment.author == user %}
+                                         <button class="edit-button">Edit</button>
+                                         <!-- Vùng trả lời ẩn -->
+                                         <div class="reply-form">
+                                             <form action="{% url 'app_social:commentPost' post.id %}" method="post">
+                                                 {% csrf_token %}
+                                                 <input type="hidden" name="return_profile" value="return">
+                                                 <input type="hidden" name="comment_id" value="{{comment.id}}">
+                                                 <textarea required class="reply-textarea" name="content" placeholder="Nhập bình luận của bạn">{{comment.content}}</textarea>
+                                                 <button class="submit-reply" type="submit" name="edit_comment">Edit</button>
+                                             </form>
+                                         </div>
+                                        {% endif %}
+                                        {% if post.author == user or comment.author == user %}
+                                        {% comment %} Delete comment {% endcomment %}
+                                        <a href="{% url 'app_social:deleteComment' comment.id  %}?return-p=32"><button class="delete-button">Delete</button></a>
+                                        {% endif %}
+                                    </div>
+                                    
+                                </div>
+                                {% for reply in reply_comment_post %}
+                                {% if reply.comment.id == comment.id %}
+                                <div class="reply-comment">
+                                    <div class="avatar">
+                                        <img src="{{reply.author.avatar.url}}" alt="Reply User Avatar">
+                                    </div>
+                                    <div class="comment-content">
+                                        <h6>{{reply.author.last_name}} {{reply.author.first_name}}</h6>
+                                        <p class="content-comment">{{reply.text}}</p>
+                                        <span class="timestamp">{{reply.created_at}}</span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+
+
+                                {% endif %}
+                                {% endfor %}
+                                <div class="d-flex align-items-center">
+                                    <img src="/media/{{ user.avatar }}" alt="" class="rounded-image" />
+                                    <div class="flex-fill ps-2">
+                                        <form action="{% url 'app_social:commentPost' post.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="return_profile" value="return">
+                                            <div class="position-relative d-flex align-items-center">
+                                                <input required name="content" type="text"
+                                                    class="form-control rounded-pill bg-white bg-opacity-15"
+                                                    style="padding-right: 120px;" placeholder="Write a comment..." />
+                                                <button class="btn btn-primary btn_comment" type="submit"
+                                                    name="add_comment">Comment</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="d-none d-xl-block col-md-4 col-xl-3 right-wrapper">
+                <div class="row">
+                    <div class="col-md-12 grid-margin">
+                        <div class="card rounded">
+                            <div class="card-body">
+                                <h6 class="card-title">My Groups</h6>
+                                <ul>
+                                    {% for group in user_groups %}
+                                    <div class="wrap_group">
+                                        <div class="group-circle">
+                                            <img class="rounded-image" src="{{ group.group_picture.url }}"
+                                                alt="Hình ảnh nhóm">
+                                        </div>
+                                        <div class="wrap_nameGroup">
+                                            <a href="{% url 'app_social:group_detail' group.id %}">{{group.name}}</a>
+                                            <p>{{group.description}}</p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Edit post -->
+                    {% for post in posts %}
+                    <div class="overlay" id="overlay" style="display: none;" overflow-y="auto"
+                        data-post-id="{{ post.id }}">
+
+                        <form action="{% url 'app_social:edit_post' post.id %}" method="POST"
+                            enctype="multipart/form-data" display="block" class="editForm" class="editForm">
+                            {% csrf_token %}
+                            <h1>Chỉnh sửa bài viết</h1>
+                            <input type="text" name="content" placeholder="Bạn đang nghỉ gì?">
+                            <div class="layout-img">
+                                {% for image in post.images.all %}
+                            <img class="img-edit" src="{{ image.image.url }}" alt="Img">
+                                {% endfor %}
+                            </div>
+                            <div class="layout-img">
+                                {% for video in post.video.all %}
+                                <div class="video-wrapper">
+                                    <video controls>    
+                                        {% csrf_token %}
+                                        <source src="{{video.video.url}}" type="video/mp4">
+                                    </video>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <label  class="file-upload-label">
+                                <input type="file" id="fileInput" name="images" multiple>
+                                <i class="fa-solid fa-circle-plus"></i>
+                            </label>
+                            <label  class="file-upload-label">
+                                <input type="file" id="videoInput" name="videos" multiple>
+                                <i class="fa-solid fa-video"></i>
+                            </label>
+                            <button type="submit">Chỉnh sửa</button>
+                            <button type="reset" id="close-overlay" class="close-overlay">Thoát</button>
+
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+    {% endblock %}
+    {% block js_block %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{% static 'js/profile.js' %}"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+       const show_alertDelete = urlParams.get('show_alertDelete');
+      
+       if (show_alertDelete === 'true') {
+         Swal.fire({
+           icon: 'success',
+           title: 'Announcement',
+           text: 'Xóa group thành công',
+         });
+       }
+     </script>
+    {% endblock %}

@@ -1,0 +1,50 @@
+{% extends "header.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/friend_request.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+<link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+{% endblock %}
+{% block body_block %}
+
+<div class="header">
+    
+  </div>
+
+
+  <div class="jumbotron list-content">
+    <ul class="list-group">
+     
+      {% for friend in received_requests %}
+      
+      <div class="col-md-6 col-xl-4" style="margin-bottom: 1rem; margin-left: 5rem; margin-top: 3rem;">
+        <div class="card">
+
+            <div class="card-body">
+                <div class="media align-items-center"><img src="/media/{{friend.from_user.avatar}}"
+                        class="avatar avatar-xl mr-3"></img>
+                    <div class="media-body overflow-hidden">
+                        <a href="{% url 'app_social:user_profile' friend.from_user.username %}"
+                            class="card-text mb-0">{{friend.from_user.last_name}}
+                            {{friend.from_user.first_name}}</a>
+                        <p class="card-text text-uppercase text-muted">{{friend.from_user.bio}}</p>
+                        <p class="card-text">
+                            {{friend.from_user.lives}}
+                        </p>
+                       
+                    </div>
+                </div>
+                <label class="pull-right">
+                  <a  class="btn_add" href="{% url 'app_social:accept_friend_request' friend.id %}" title="accpet">Accept</a>
+                  <a  class="btn_friend " href="{% url 'app_social:reject_friend_request' friend.id %}" title="reject">Reject</a>
+              </label>
+            </div>
+        </div>
+    
+  </div>
+      {% endfor %}
+    </ul>
+  </div>
+  </div>
+</div>                                                                                                                 
+{% endblock %}

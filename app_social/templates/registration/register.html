@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="{% static "css/registration.css" %}">
+</head>
+<body>
+<h1>
+    Đăng ký
+</h1>
+<form class="class="form"" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Đăng ký">
+  <a href="{% url 'app_social:login' %}">Đăng nhập</a>
+</form>
+</body>
+</html>
