@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,Passwo
 class createGroup(forms.ModelForm):
     class Meta:
         model = Group
-        fields = ['name','description','group_picture']
+        fields = ['name','description','group_picture','imgcover']
 
 class PostForm(forms.ModelForm):
     class Meta:

@@ -39,29 +39,6 @@
                                         {% endif %}
                                     {% endif %}
                                     </button>
-                                    
-                                       
-                                    {% if not profile_user.is_friend %}
-                                    <button class="btn btn-primary btn-icon-text btn-edit-profile">
-                                        
-                                        <svg viewBox="0 0 24 24"  width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit btn-icon-prepend"  xmlns="http://www.w3.org/2000/svg">
-
-                                            <path d="M17 10H20M23 10H20M20 10V7M20 10V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
-                                            <path d="M1 20V19C1 15.134 4.13401 12 8 12V12C11.866 12 15 15.134 15 19V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                             <path d="M8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
-                                        
-                                        </svg>
-                                    <span>
-                                        <a style="color: white; text-decoration:none;" href="{% url 'app_social:send_friend_request' profile_user.username %}" class="btn_add">Add Friend</a>
-                                    </span>
-                                </button>
-                                    {% else %}
-                                   
-                                    <span class="btn btn-secondary ">
-                                        <p style="margin: 0;" >Already friend</p>
-                                    </span>
-                                    {% endif %}
-
                                 </div>
                             </div>
                         </div>
@@ -145,6 +122,9 @@
                     </form>
                     <div class="row">
                         {% for post in posts %}
+                        {% if post.profile_id is None %}
+
+                        {% if post.view_post == 'public' and post.view_post != 'onlyme' %}
                         <div class="col-md-12 grid-margin">
                             <div class="card rounded">
                                 <div class="card-header">
@@ -300,6 +280,165 @@
                                 </div>
                             </div>
                         </div>
+                        {% elif post.view_post == 'friends' and profile_user.isFriendView %}
+                        <div class="col-md-12 grid-margin">
+                            <div class="card rounded">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img class="img-xs rounded-circle" src="/media/{{ post.author.avatar }}" alt="">
+                                            <div class="ml-2">
+                                                {% if post.author != profile_user %}
+                                                <p style="font-weight: bold;">{{ post.author.last_name }} {{ post.author.first_name }} to {{profile_user.last_name}}{{profile_user.first_name}}</p>
+                                                {% else %}
+                                                <p style="font-weight: bold;">{{ post.author.last_name }} {{ post.author.first_name }} </p>
+                                                {% endif %}
+                                                
+                                                <p class="tx-11 text-muted">{{ post.created_at }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if request.user == post.author %}
+                                    <div class="dropdown_">
+                                        <button onclick="myFunction({{ post.id }})" class="dropbtn edit-button"
+                                            data-post-id="{{ post.id }}">...</button>
+                                        <div id="myDropdown-{{ post.id }}" class="dropdown-content">
+                                            <a id="editButton" class="edit-link" href="#"
+                                                data-post-id="{{ post.id }}">Edit</a>
+                                            <a href="{% url 'app_social:delete_post' post.id %}?username={{profile_user.username}}">Delete</a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <p class="mb-3 tx-14">{{ post.content }}</p>
+                                        <div class="video-container">
+    
+                                            {% for video in post.video.all %}
+                                            <div class="video-wrapper">
+                                                <video controls>
+                                                    {% csrf_token %}
+                                                    <source src="{{video.video.url}}" type="video/mp4">
+                                                </video>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="layout-img">
+                                            {% for image in post.images.all %}
+                                            <img class="img-post" src="{{ image.image.url }}" alt="Img post">
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="d-flex post-actions">
+                                            {% if post.liked == 'True' %}
+                                            
+                                            <a href="{% url 'app_social:like_Userpost' post.id %}?username={{profile_user.username}}"
+                                                class="btn-like text-primary text-opacity-50 text-decoration-none d-block p-2"
+                                                name="like_post_in_profile">
+                                                {{post.likes.count}}<i
+                                                    class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
+                                            {% else %}
+                                            <a href="{% url 'app_social:like_Userpost' post.id %}?username={{profile_user.username}}"
+                                                class="btn-like text-body text-opacity-50 text-decoration-none d-block p-2"
+                                                name="like_post_in_profile">
+                                                {{post.likes.count}} <i
+                                                    class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
+                                            {% endif %}
+                                            <a class="btn-comment" href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2">
+                                                <i class="far fa-comment me-1 d-block d-sm-inline"></i> Comment </a>
+    
+    
+                                        </div>
+    
+    
+                                    </div>
+                                    <hr class="mb-3 mt-1 opacity-1" />
+    
+                                    {% if user.username %}
+                                    {% for comment in comments %}
+                                    {% if comment.post.id == post.id %}
+                                    <div class="comment">
+                                        <div class="avatar">
+                                            <img src="{{comment.author.avatar.url}}" alt="User Avatar">
+                                        </div>
+                                        <div class="comment-content">
+                                            <h6>{{comment.author.last_name}} {{comment.author.first_name}}</h6>
+                                            <p class="content-comment">{{comment.content}}</p>
+                                            <span class="timestamp">{{comment.created_at}}</span>
+                                            <button class="reply-button">Reply</button>
+                                            <!-- Vùng trả lời ẩn -->
+                                            <div class="reply-form">
+                                                <form action="{% url 'app_social:commentUserPost' post.id %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="comment_id" value="{{comment.id}}">
+                                                    <input type="hidden" name="username" value="{{profile_user.username}}">
+                                                    <textarea required class="reply-textarea" name="text"
+                                                        placeholder="Nhập bình luận của bạn"></textarea>
+                                                    <button class="submit-reply" type="submit"
+                                                        name="reply_comment">Send</button>
+                                                </form>
+                                            </div>
+                                            {% comment %} Edit comment {% endcomment %}
+                                         {% if comment.author == user %}
+                                         <button class="edit-button">Edit</button>
+                                         <!-- Vùng trả lời ẩn -->
+                                         <div class="reply-form">
+                                             <form action="{% url 'app_social:commentPost' post.id %}" method="post">
+                                                 {% csrf_token %}
+                                                 <input type="hidden" name="comment_id" value="{{comment.id}}">
+                                                 <textarea required class="reply-textarea" name="content" placeholder="Nhập bình luận của bạn">{{comment.content}}</textarea>
+                                                 <button class="submit-reply" type="submit" name="edit_comment">Edit</button>
+                                             </form>
+                                         </div>
+                                        {% endif %}
+                                        {% if post.author == user or comment.author == user %}
+                                        {% comment %} Delete comment {% endcomment %}
+                                            <a href="{% url 'app_social:deleteComment' comment.id %}?username={{profile_user.username}}"><button class="delete-button">Delete</button></a>
+                                        {% endif %}
+                                        </div>
+    
+                                    </div>
+                                    {% for reply in reply_comment_post %}
+                                    {% if reply.comment.id == comment.id %}
+                                    <div class="reply-comment">
+                                        <div class="avatar">
+                                            <img src="{{reply.author.avatar.url}}" alt="Reply User Avatar">
+                                        </div>
+                                        <div class="comment-content">
+                                            <h6>{{reply.author.last_name}} {{reply.author.first_name}}</h6>
+                                            <p class="content-comment">{{reply.text}}</p>
+                                            <span class="timestamp">{{reply.created_at}}</span>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+    
+    
+                                    {% endif %}
+                                    {% endfor %}
+                                    <div class="d-flex align-items-center">
+                                        <img src="/media/{{ request.user.avatar }}" alt="" class="rounded-image" />
+                                        <div class="flex-fill ps-2">
+                                            <form action="{% url 'app_social:commentUserPost' post.id %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="position-relative d-flex align-items-center">
+                                                    <input type="hidden" name="username" value="{{profile_user.username}}">
+                                                    <input required name="content" type="text"
+                                                        class="form-control rounded-pill bg-white bg-opacity-15"
+                                                        style="padding-right: 120px;" placeholder="Write a comment..." />
+                                                    <button class="btn btn-primary btn_comment" type="submit"
+                                                        name="add_comment">Comment</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}   
+                        {% endif %}       
+    
                         <div class="overlay" id="overlay" style="display: none;" overflow-y="auto"
                         data-post-id="{{ post.id }}">
 

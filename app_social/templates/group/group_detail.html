@@ -1,18 +1,347 @@
 {% extends "header.html" %}
 {% load static %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/group_detail.css' %}" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+<link rel="stylesheet" href="/static/css/profile.css">
+<link rel="stylesheet" href="/static/css/group_detail.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 {% endblock %}
 {% block body_block %}
+<div class="container">
+    <div class="profile-page tx-13">
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="profile-header">
+                    <div class="cover">
+                        <div class="gray-shade"></div>
+                        <figure>
+                            {% if group.imgcover %}
+                            <img src="/media/{{ group.imgcover }}" class="img-fluid" alt="profile cover">
+                            {% else %}
+                            <img src="https://bootdey.com/img/Content/bg1.jpg" class="img-fluid" alt="profile cover">
+                            {% endif %}
+                        </figure>
+                        <div class="cover-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <img class="profile-pic m-4" src="/media/{{ group.group_picture }}" alt="profile">
+                                <span class="profile-name">{{group.name}}</span>
+                            </div>
+                            <div class="d-none d-md-block">
+                                {% if user_joined_group %}
+                <span class="flex">
+                    <div style='display: flex; flex-direction: row;'>
+                    <form action="{% url 'app_social:leave_group' group.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-primary mx-1" type="submit">Leave group</button>
+                    </form>
+                    {% if group.created_by == request.user %}
+                    <button onclick="groupFunction({{ group.id }})" class="dropbtn btn btn-secondary "
+                    data-group-id="{{ group.id }}">Edit</button>
+                    <form action="{% url 'app_social:delete_group' group.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-danger mx-1" type="submit">Delete group</button>
+                    </form>
+                    {% endif %}
+                </div>
+                </span>
+                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+        <div class="row profile-body">
+
+            <div class="d-none d-md-block col-md-4 col-xl-3 left-wrapper">
+                <div class="card rounded">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="card-title mb-0">About</h6>
+                        </div>
+                        <p>{{group.description}}</p>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="card-title mb-0">Author</h6>
+                        </div>
+                        <p>{{group.created_by}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-6 middle-wrapper">
+                <div class="row">
+                    {% comment %} Create post {% endcomment %}
+                        <div class="create-pots-profile">
+                            <div class="panel-body">
+                                    <div class="custom-alert">
+                                        <ul>
+                                            {% for message in messages %}
+                                                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                <form  method="post" class="status-form"  enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="elements-form">
+                                       
+                                        <textarea name="content" class="form-control" placeholder="What are you thinking?"></textarea>
+
+                                        <div class="mar-top clearfix">
+                                            <label for="fileInput" class="file-upload-label">
+                                                <input type="file" id="fileInput" name="images" multiple>
+                                                <i class="fa-solid fa-circle-plus"></i>
+                                            </label>
+                                            <label for="videoInput" class="file-upload-label">
+                                                <input type="file" id="videoInput" name="videos" multiple>
+                                                <i class="fa-solid fa-video"></i>
+                                            </label>
+                                            <button class="btn btn-sm btn-primary pull-right" type="submit"><i
+                                                class="fa fa-pencil fa-fw"></i>
+                                            Share</button>
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    
+                    {% comment %} Your post{% endcomment %}
+                    {% for post in group_posts  %}
+                    <div class="col-md-12 grid-margin">
+                        <div class="card rounded">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <img class="img-xs rounded-circle" src="/media/{{ post.author.avatar }}" alt="">
+                                        <div class="ml-2">
+                                            <a href="{% url 'app_social:user_profile' post.author.username %}" class="text-decoration-none">{{ post.author.username }} </a>
+                                            <p class="tx-11 text-muted">{{ post.created_at }}</p>
+                                        </div>
+                                    </div>
+                                    {% if user_joined_group %}
+                                    {% if post.author.username == request.user.username %}
+                                    <div class="dropdown_">
+                                        <button onclick="myFunction({{ post.id }})" class="dropbtn edit-button"
+                                            data-post-id="{{ post.id }}">...</button>
+                                        <div id="myDropdown-{{ post.id }}" class="dropdown-content">
+                                            <button id="editButton" class="edit-link"
+                                                data-post-id="{{ post.id }}">Edit</button>
+                                            <form method="post"
+                                                action="{% url 'app_social:group_detail' group.id %}">
+                                                <input type="hidden" name="post_id" value="{{ post.id }}">
+                                                {% csrf_token %}
+                                                <button type="submit" name="delete_post">Xóa bài viết</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% endif %}
+
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-3 tx-14">{{ post.content }}</p>
+                                    <div class="video-container">
+
+                                        {% for video in post.video.all %}
+                                        <div class="video-wrapper">
+                                            <video controls>
+                                                {% csrf_token %}
+                                                <source src="{{video.video.url}}" type="video/mp4">
+                                            </video>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="layout-img">
+                                        {% for image in post.images.all %}
+                                        <img class="img-post" src="{{ image.image.url }}" alt="Img post">
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer">
+                                    <div class="d-flex post-actions">
+                                       {{post.like}}
+                                        
+                                        {% if post.liked == 'True' %}
+                                        
+                                        <a href="{% url 'app_social:like_Grouppost' post_id=post.id group_id=group.id %}"
+                                                    class="btn-like  text-primary text-opacity-50 text-decoration-none d-block p-2">
+                                                    {{post.likes.count}} <i
+                                                        class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes
+                                                </a>
+                                        {% else %}
+                                        <a href="{% url 'app_social:like_Grouppost' post_id=post.id group_id=group.id  %}"
+                                        class="btn-like  text-body text-opacity-50 text-decoration-none d-block p-2">
+                                        {{post.likes.count}} <i
+                                            class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes
+                                    </a>
+                                        {% endif %}
+                                        <a href="#"
+                                        class="btn-comment text-body text-opacity-50 text-decoration-none d-block p-2">
+                                        <i class="far fa-comment me-1 d-block d-sm-inline"></i> Comment </a>
+
+                                    </div>
 
 
-<div class="panel-body">
-    <div class="row">
-        <div class="col-md-3 member_container">
-            <h1>Members</h1>
-            {% for member in group_members %}
+                                </div>
+                                <hr class="mb-3 mt-1 opacity-1" />
+
+                              
+                                {% for comment in post.comments.all %}
+                              
+                                <div class="comment">
+                                    <div class="avatar">
+                                        <img src="/media/{{comment.author.avatar}}" alt="User Avatar">
+                                    </div>
+                                    <div class="comment-content">
+                                        <h6>{{comment.author.last_name}} {{comment.author.first_name}}</h6>
+                                        <p class="content-comment">{{comment.content}}</p>
+                                        <span class="timestamp">{{comment.created_at}}</span>
+                                        {% if user_joined_group %}
+                                        <button class="reply-button">Reply</button>
+                                        <div class="reply-form">
+                                            <form method="post" class="comment-container"
+                                            action="{% url 'app_social:group_detail' group.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                            <textarea class="comment-textarea" name="text"
+                                                placeholder="Viết bình luận..."></textarea>
+                                            <button class="comment-button" type="submit"
+                                                name="reply_comment">Send</button>
+                                            </form>
+                                        </div>
+                                        {% endif %}
+
+                                         {% if comment.author == request.user %}
+                                         {% if user_joined_group %}
+                                         <button class="btn-secondary edit-button">Edit</button>
+                                        
+                                         <div class="reply-form">
+                                             <form action="{% url 'app_social:commentGroupPost' post.id %}" method="post">
+                                                 {% csrf_token %}
+                                                 <input type="hidden" name="return_group" value="{{group.id}}">
+                                                 <input type="hidden" name="comment_id" value="{{comment.id}}">
+                                                 <textarea required class="reply-textarea" name="content" placeholder="Nhập bình luận của bạn">{{comment.content}}</textarea>
+                                                 <button class="submit-reply" type="submit" name="edit_comment">Edit</button>
+                                             </form>
+                                         </div>
+                                        {% endif %}
+                                        {% endif %}
+                                        {% if user_joined_group %}
+
+                                        {% if post.author == user or comment.author == user %}
+                                        {% comment %} Delete comment {% endcomment %}
+                                        <a href="{% url 'app_social:deleteCommentGroupPost' comment.id  %}?return-g={{group.id}}"><button class="delete-button">Delete</button></a>
+                                        {% endif %}
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                                {% for reply in comment.replies.all %}
+                                {% if reply.comment.id == comment.id %}
+                                <div class="reply-comment">
+                                    <div class="avatar">
+                                        <img src="/media/{{ reply.author.avatar  }}" alt="Reply User Avatar">
+                                    </div>
+                                    <div class="comment-content">
+                                        <h6>{{reply.author.last_name}} {{reply.author.first_name}}</h6>
+                                        <p class="content-comment">{{reply.text}}</p>
+                                        <span class="timestamp">{{reply.created_at}}</span>
+                                    </div>
+                                    {% if user_joined_group %}
+                                    {% if comment.author == request.user %}
+                                    <button class="btn-secondary edit-button">Edit</button>
+                                   
+                                    <div class="reply-form">
+                                        <form action="{% url 'app_social:commentGroupReplyPost' post.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="return_group" value="{{group.id}}">
+                                            <input type="hidden" name="reply" value="{{reply.id}}">
+                                            <textarea required class="reply-textarea" name="content" placeholder="Nhập bình luận của bạn">{{reply.text}}</textarea>
+                                            <button class="submit-reply" type="submit" name="edit_reply">Edit</button>
+                                        </form>
+                                    </div>
+                                   {% endif %}
+                                   {% endif %}
+                                   {% if user_joined_group %}
+                                   {% if post.author == user or comment.author == user %}
+                                   {% comment %} Delete comment {% endcomment %}
+                                   <a href="{% url 'app_social:deleteReplyCommentGroupPost' reply.id  %}?return-g={{group.id}}"><button class="delete-button">Delete</button></a>
+                                   {% endif %}
+                                   {% endif %}
+
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+
+                                {% endfor %}
+
+
+                              
+                                {% if user_joined_group %}
+                                <div class="d-flex align-items-center">
+                                    <img src="/media/{{ request.user.avatar }}" alt="" width="35"
+                                        class="rounded-circle" />
+                                    <!-- form comment -->
+                                    <form class="flex-fill ps-2" method="post"
+                                        action="{% url 'app_social:group_detail' group.id %}">
+                                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                                        {% csrf_token %}
+                                        <div class="position-relative d-flex align-items-center">
+                                            <input type="text" name="content"
+                                                class="form-control rounded-pill bg-white bg-opacity-15"
+                                                style="padding-right: 120px;"
+                                                placeholder="Write a comment..." />
+                                            <button class="comment-button" type="submit"
+                                                name="add_comment">Comment</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                    </div>
+ <!--edit-->
+ <div class="overlay" id="overlay" style="display: none;" overflow-y="auto"
+ data-post-id="{{ post.id }}">
+ <form action="{% url 'app_social:edit_Grouppost' post.id %}" enctype="multipart/form-data" method="post" display="block" class="editForm">
+     
+     <div class="editForm">
+         {% csrf_token %}
+         <input type="hidden" name="group_id" value="{{ group.id }}">
+         <h1>Chỉnh sửa bài viết</h1>
+         <input type="text" name="content" placeholder="Bạn đang nghĩ gì?">
+         <div class="layout-img">
+             {% for image in post.images.all %}
+             <img class="img-post" src="{{ image.image.url }}" alt="Img">
+             {% endfor %}
+         </div>
+         <label class="file-upload-label">
+            <input type="file" id="fileInput" name="images" multiple>
+             <i class="fa-solid fa-circle-plus"></i>
+         </label>
+         <button type="submit">Chỉnh sửa</button>
+         <button type="reset" id="close-overlay" class="close-overlay">Thoát</button>
+     </div>
+ </form>
+
+</div>
+
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="d-none d-xl-block col-md-4 col-xl-3 right-wrapper">
+                <div class="row">
+                    <div class="col-md-12 grid-margin">
+                        <div class="card rounded">
+                            <div class="card-body">
+                                <h6 class="card-title">Members</h6>
+                              
+                                    {% for member in group_members %}
             <div class="wrap_Friends">
                 {% if member != request.user %}
                 <div class="wrap_suggestFriends">
@@ -20,9 +349,10 @@
                     <div class="about_profile">
                         <a href="{% url 'app_social:user_profile' member.username %}">{{member.last_name}}
                             {{member.first_name}}</a>
-                        <p>{{member.bio}}</p>
+                        <p style="max-width: 10rem;">{{member.bio}}</p>
                     </div>
                 </div>
+                {% if user_joined_group %}
                 {% if not member.is_friend %}
                 <span>
                     <a href="{% url 'app_social:send_friend_request' member.username %}?group_id={{group.id}}" class="btn_add">Add Friend</a>
@@ -32,256 +362,50 @@
                     <p class="btn_friend">Already friend</p>
                 </span>
                 {% endif %}
-
+                {% endif %}
                 {% endif %}
             </div>
             {% endfor %}
-
-        </div>
-        <div class="col-md-6 ">
-            <div class="container">
-                {% if user_joined_group %}
-                <span class="flex">
-                    <h1>{{ group.name }}</h1>
-                    <div style='display: flex; flex-direction: row;'>
-                    <form action="{% url 'app_social:leave_group' group.id %}" method="post">
-                        {% csrf_token %}
-                        <button class="btn btn-primary" type="submit">Leave group</button>
-                    </form>
-                    {% if group.created_by == request.user %}
-                    <form action="{% url 'app_social:delete_group' group.id %}" method="post">
-                        {% csrf_token %}
-                        <button class="btn btn-danger" type="submit">Delete group</button>
-                    </form>
-                    {% endif %}
-                </div>
-                </span>
-                {% endif %}
-
-
-
-                <div class="status-update">
-                    <form method="post" class="status-form"  enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <textarea name="content" class="status-input" placeholder="What are you thinking?"></textarea>
-                        <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                            <div>
-                                <label for="fileInput" class="file-upload-label">
-                                    <input type="file" id="fileInput" name="images" multiple>
-                                    <i class="fa-solid fa-circle-plus"></i>
-                                </label>
-                                <label for="videoInput" class="file-upload-label">
-                                    <input type="file" id="videoInput" name="videos" multiple>
-                                    <i class="fa-solid fa-video"></i>
-                                </label>
+                               
                             </div>
-
-                            <button class="btn btn-sm btn-primary pull-right" type="submit"><i
-                                    class="fa fa-pencil fa-fw"></i>
-                                Share</button>
-
+                        </div>
+                    </div>
+                    <!-- Edit post -->
+                    <div class="overlay" id="overlay" style="display: none;" overflow-y="auto"
+                    data-group-id="{{ group.id }}">
+                    <form action="{% url 'app_social:edit_group' group.id %}" enctype="multipart/form-data" method="POST" display="block" class="editForm">
+                        <div class="editForm">
+                            {% csrf_token %}
+                            <h1>Chỉnh sửa nhóm</h1>
+                            <input  type="text" name="name" placeholder="Tiêu đề của nhóm">
+                            <input  type="text" name="description" placeholder="Mô tả của nhóm">
+                            <div class="layout-img">
+                                <img class="img-post" src="{{ group.group_picture.url }}" alt="Img">
+                            </div>
+                            <label class="file-upload-label">
+                               <input type="file" id="fileInput" name="groupPicture" >
+                                <i class="fa-solid fa-circle-plus"></i>
+                            </label>
+                            {% if group.imgcover %}
+                            <div class="layout-img">
+                                <img class="img-post" src="{{ group.imgcover.url }}" alt="Img">
+                            </div>
+                            {% endif %}
+                            <label class="file-upload-label">
+                                <input type="file" id="fileInput" name="groupImgCover" >
+                                 <i class="fa-solid fa-circle-plus"></i>
+                             </label>
+                            <button type="submit">Chỉnh sửa</button>
+                            <button type="reset" id="close-overlay" class="close-overlay">Thoát</button>
                         </div>
                     </form>
+    
                 </div>
-
-                <div class="container profile">
-                    <ul class="post-list">
-                        {% for post in group_posts %}
-
-                        <div class="row">
-                            <div class="col-md-3">
-
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        {% if user_joined_group %}
-                                        {% if post.author.username == request.user.username %}
-
-                                        <div style="display: flex; flex-direction: row; justify-content:end;">
-
-
-                                            <div class="dropdown_">
-                                                <button onclick="myFunction({{ post.id }})" class="dropbtn edit-button"
-                                                    data-post-id="{{ post.id }}">...</button>
-                                                <div id="myDropdown-{{ post.id }}" class="dropdown-content">
-                                                    <button id="editButton" class="edit-link"
-                                                        data-post-id="{{ post.id }}">Edit</button>
-                                                    <form method="post"
-                                                        action="{% url 'app_social:group_detail' group.id %}">
-                                                        <input type="hidden" name="post_id" value="{{ post.id }}">
-                                                        {% csrf_token %}
-                                                        <button type="submit" name="delete_post">Xóa bài viết</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% endif %}
-                                        {% endif %}
-                                        <div
-                                            style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div style="display: flex; align-items: center;">
-                                                <a href="#"><img src="/media/{{ post.author.avatar }}" alt="" width="50"
-                                                        class="rounded-circle" /></a>
-                                                <div class="flex-fill ps-2">
-                                                    <div class="fw-bold"><a
-                                                            href="{% url 'app_social:user_profile' post.author.username %}"
-                                                            class="text-decoration-none">
-                                                            {{ post.author.username }}</div>
-                                                    <div class="small text-body text-opacity-50">{{ post.created_at }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-                                        <p>{{ post.content }}</p>
-
-                                        <div class="video-container">
-                                
-                                            {% for video in post.video.all %}
-                                              <div class="video-wrapper">
-                                                <video controls>
-                                                    {% csrf_token %}
-                                                  <source src="{{video.video.url}}" type="video/mp4">
-                                                </video>
-                                              </div>
-                                            {% endfor %}
-                                        </div>
-                                        
-
-                                        <div class="layout-img">
-                                            {% for image in post.images.all %}
-                                            <img class="img-post" src="{{ image.image.url }}" alt="Img post">
-                                            {% endfor %}
-                                        </div>
-
-
-                                        <hr class="mb-1 opacity-1" />
-
-                                        <div class="row text-center fw-bold">
-                                            <div class="col">
-                                                {% if post.liked == 'True' %}
-                                                <a href="{% url 'app_social:like_Grouppost' post_id=post.id group_id=group.id %}"
-                                                    class="text-primary text-opacity-50 text-decoration-none d-block p-2">
-                                                    {{post.likes.count}} <i
-                                                        class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes
-                                                </a>
-                                                {% else %}
-                                                <a href="{% url 'app_social:like_Grouppost' post_id=post.id group_id=group.id  %}"
-                                                    class="text-body text-opacity-50 text-decoration-none d-block p-2">
-                                                    {{post.likes.count}} <i
-                                                        class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes
-                                                </a>
-                                                {% endif %}
-                                            </div>
-                                            <div class="col">
-                                                <a href="#"
-                                                    class="text-body text-opacity-50 text-decoration-none d-block p-2">
-                                                    <i class="far fa-comment me-1 d-block d-sm-inline"></i> Comment </a>
-                                            </div>
-                                        </div>
-                                        <ul class="comment-list">
-                                            {% for comment in post.comments.all %}
-                                            <li class="comment-item">
-                                                <div class="comment-header">
-                                                    <img src="/media/{{ post.author.avatar }}" alt="" width="35"
-                                                        class="rounded-circle" />
-                                                    <p class="comment-author">{{ comment.author.username }}</p>
-                                                </div>
-                                                <div class="comment-content">
-                                                    <p>{{ comment.content }}</p>
-                                                </div>
-                                                <ul class="reply-list">
-                                                    {% for reply in comment.replies.all %}
-                                                    <li class="reply-item">
-                                                        <div class="comment-header">
-                                                            <img src="/media/{{ reply.author.avatar  }}" alt=""
-                                                                width="35" class="rounded-circle" />
-                                                            <p class="reply-author">{{ reply.author.username }}</p>
-                                                        </div>
-                                                        <p class="reply-text">{{ reply.text }}</p>
-                                                    </li>
-                                                    {% endfor %}
-                                                </ul>
-                                                {% if user_joined_group %}
-
-                                                <form method="post" class="comment-container"
-                                                    action="{% url 'app_social:group_detail' group.id %}">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
-                                                    <textarea class="comment-textarea" name="text"
-                                                        placeholder="Viết bình luận..."></textarea>
-                                                    <button class="comment-button" type="submit"
-                                                        name="reply_comment">Reply</button>
-                                                </form>
-                                                {% endif %}
-
-                                            </li>
-                                            {% endfor %}
-                                        </ul>
-                                        <hr class="mb-3 mt-1 opacity-1" />
-                                        {% if user_joined_group %}
-                                        <div class="d-flex align-items-center">
-                                            <img src="/media/{{ post.author.avatar }}" alt="" width="35"
-                                                class="rounded-circle" />
-                                            <!-- form comment -->
-                                            <form class="flex-fill ps-2" method="post"
-                                                action="{% url 'app_social:group_detail' group.id %}">
-                                                <input type="hidden" name="post_id" value="{{ post.id }}">
-                                                {% csrf_token %}
-                                                <div class="position-relative d-flex align-items-center">
-                                                    <input type="text" name="content"
-                                                        class="form-control rounded-pill bg-white bg-opacity-15"
-                                                        style="padding-right: 120px;"
-                                                        placeholder="Write a comment..." />
-                                                    <button class="comment-button" type="submit"
-                                                        name="add_comment">Comment</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                            </div>
-
-                        </div>
-                        <!--edit-->
-                        <div class="overlay" id="overlay" style="display: none;" overflow-y="auto"
-                            data-post-id="{{ post.id }}">
-                            <form action="{% url 'app_social:edit_Grouppost' post.id %}" enctype="multipart/form-data" method="post" display="block" class="editForm">
-                                
-                                <div class="editForm">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="group_id" value="{{ group.id }}">
-                                    <h1>Chỉnh sửa bài viết</h1>
-                                    <input type="text" name="content" placeholder="Bạn đang nghĩ gì?">
-                                    <div class="layout-img">
-                                        {% for image in post.images.all %}
-                                        <img class="img-post" src="{{ image.image.url }}" alt="Img">
-                                        {% endfor %}
-                                    </div>
-                                    <label class="file-upload-label">
-                                       <input type="file" id="fileInput" name="images" multiple>
-                                        <i class="fa-solid fa-circle-plus"></i>
-                                    </label>
-                                    <button type="submit">Chỉnh sửa</button>
-                                    <button type="reset" id="close-overlay" class="close-overlay">Thoát</button>
-                                </div>
-                            </form>
-
-                        </div>
-                        {% endfor %}
-                </div>
-                <input type="hidden" name="group_id" value="{{ group.id }}">
             </div>
+
         </div>
     </div>
 
-</div>
 
 
 

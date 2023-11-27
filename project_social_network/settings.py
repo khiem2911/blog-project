@@ -44,9 +44,17 @@ INSTALLED_APPS = [
     'daphne',
     'django.contrib.staticfiles',
     'app_social',
+ 
    
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' 
+EMAIL_PORT = 587  
+EMAIL_USE_TLS = True  
+EMAIL_HOST_USER = 'phamduykhiem113@gmail.com'  
+EMAIL_HOST_PASSWORD = 'vwhf youo dzhu qzpy' 
+EMAIL_TIMEOUT = 5  
 
 CHANNEL_LAYERS = {
     'default': {
@@ -127,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
 

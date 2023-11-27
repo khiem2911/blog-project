@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
         ('Nam', 'Nam'),
         ('Nữ', 'Nữ'),
     )
+    email = models.TextField(max_length=255)
     gender = models.CharField(
         max_length=3, choices=GENDER_CHOICES, blank=True, null=True, default=None)
     bio = models.TextField(blank=True)
@@ -72,9 +73,10 @@ class Post(models.Model):
     CustomUser, related_name='liked_posts', blank=True)
     liked = models.TextField(default=False)
     profile = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='posts',null=True)
+    view_post = models.CharField(max_length=10, choices=[('public', 'Public'), ('friends', 'Friends'), ('onlyme', 'Only me')], default='public')
 
     def __str__(self):
-        return f"{self.author.username} - {self.created_at}"
+        return f"{self.author.username} - {self.created_at} - {self.view_post}"
 
 
 class Like(models.Model):
@@ -117,6 +119,7 @@ class Group(models.Model):
     created_by = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='groups_created')
     created_at = models.DateTimeField(auto_now_add=True)
+    imgcover = models.ImageField(upload_to='imgcover/', blank=True, null=True)
     group_picture = models.ImageField(upload_to='group_pics/', blank=True)
 
     def __str__(self):
@@ -185,8 +188,7 @@ class Follow(models.Model):
 
 
 class CommentPost(models.Model):
-    post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name='commentsPost')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='commentsPost')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -204,3 +206,59 @@ class ReplyCommentPost(models.Model):
 
     def __str__(self):
         return f"Reply by {self.author.username} on {self.comment}"
+
+
+class Fanpage(models.Model):
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    members = models.ManyToManyField(CustomUser, related_name='fanpage_joined', blank=True)
+    name = models.TextField()
+    description = models.TextField()
+    imgFanpage = models.ImageField(upload_to='fanpage/', blank=True, null=True)
+    imgFanpageCover = models.ImageField(upload_to='fanpageCover/', blank=True, null=True)
+    likes = models.ManyToManyField(CustomUser, related_name='liked_fanpage', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Fanpage: {self.name} - {self.author.username}"
+
+class ImagePostFanpage(models.Model):
+    image = models.ImageField(upload_to='images_post_fanpage/', blank=True, null=True)
+
+class VideoPostFanpage(models.Model):
+    video = models.FileField(upload_to='videos_post_fanpage/',blank=True, null=True)
+
+class Post_Fanpage(models.Model):
+    fanpage = models.ForeignKey(Fanpage, on_delete=models.CASCADE,blank=True,null=True)
+    content = models.TextField()
+    images = models.ManyToManyField(ImagePostFanpage, blank=True)
+    video = models.ManyToManyField(VideoPostFanpage, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    likes = models.ManyToManyField(
+    CustomUser, related_name='liked_posts_fanpage', blank=True)
+    liked = models.TextField(default=False)
+
+    def __str__(self):
+        return f"Fanpage {self.fanpage.author.username} - {self.created_at}"
+
+class CommentPostFanpage(models.Model):
+    post = models.ForeignKey(Post_Fanpage, on_delete=models.CASCADE, related_name='commentsPostFanpage')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.author.username} on {self.post}"
+
+
+class ReplyCommentPostFanpage(models.Model):
+    comment = models.ForeignKey(CommentPostFanpage, on_delete=models.CASCADE, related_name='repliesPostFanpage')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Reply by {self.author.username} on {self.comment}"
+
+
+
+

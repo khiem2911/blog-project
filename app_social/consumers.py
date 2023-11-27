@@ -135,3 +135,4 @@ class OnlineStatusConsumer(AsyncWebsocketConsumer):
         else:
             userprofile.online_status = False
             userprofile.save()
+

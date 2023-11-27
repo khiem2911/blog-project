@@ -275,7 +275,7 @@ img {
     min-width: 160px;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: 2;
   }
   
   .dropdown-content a {
@@ -302,6 +302,8 @@ img {
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 100;
     display: none;
+    overflow-y: auto;
+    
   }
   
   #overlay form {
@@ -543,3 +545,5 @@ img {
     text-align: center;
     display: block;
 }
+
+

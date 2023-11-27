@@ -47,6 +47,15 @@
                                     </svg> <a style="color: white; text-decoration:none;"
                                         href="{% url 'app_social:group' %}">Create group</a>
                                 </button>
+                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-edit btn-icon-prepend">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg> <a style="color: white; text-decoration:none;"
+                                        href="{% url 'app_social:form_fanpage' %}">Create Fangape</a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -99,6 +108,7 @@
                                 <a class="pt-1px d-none d-md-block"
                                     href="{% url 'app_social:blockingFriends' %}">Blocking </a>
                             </li>
+                           
                         </ul>
                     </div>
                 </div>
@@ -154,6 +164,13 @@
                                                 <input type="file" id="videoInput" name="videos" multiple>
                                                 <i class="fa-solid fa-video"></i>
                                             </label>
+                                            <label class="file-upload-label">
+                                                <select name="view_post" class="form-select" style="border:1px solid #ced4da; color: #6c757d;">
+                                                    <option value="public" selected>Public</option>
+                                                    <option value="friends">Friends</option>
+                                                    <option value="onlyme">Only me</option>
+                                                  </select>
+                                            </label>
                                             <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-pencil fa-fw"></i>
                                                 Share</button>
                                         </div>
@@ -184,10 +201,8 @@
                                         <button onclick="myFunction({{ post.id }})" class="dropbtn edit-button"
                                             data-post-id="{{ post.id }}">...</button>
                                         <div id="myDropdown-{{ post.id }}" class="dropdown-content">
-                                            {% if post.author == request.user %}
                                             <a id="editButton" class="edit-link" href="#"
                                                 data-post-id="{{ post.id }}">Edit</a>
-                                                {% endif %}
                                             <a href="{% url 'app_social:delete_post' post.id %}">Delete</a>
                                         </div>
                                     </div>
@@ -297,6 +312,23 @@
                                         <p class="content-comment">{{reply.text}}</p>
                                         <span class="timestamp">{{reply.created_at}}</span>
                                     </div>
+                                    {% if comment.author == user %}
+                                    <button class="edit-button">Edit</button>
+                                    <!-- Vùng trả lời ẩn -->
+                                    <div class="reply-form">
+                                        <form action="{% url 'app_social:commentReplyPost' post.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="return_profile" value="return">
+                                            <input type="hidden" name="reply" value="{{reply.id}}">
+                                            <textarea required class="reply-textarea" name="content" placeholder="Nhập bình luận của bạn">{{reply.text}}</textarea>
+                                            <button class="submit-reply" type="submit" name="edit_commentReply">Edit</button>
+                                        </form>
+                                    </div>
+                                   {% endif %}
+                                   {% if post.author == user or comment.author == user %}
+                                   {% comment %} Delete comment {% endcomment %}
+                                   <a href="{% url 'app_social:deleteReplyCommentPost' reply.id  %}?return=p"><button class="delete-button">Delete</button></a>
+                                   {% endif %}
                                 </div>
                                 {% endif %}
                                 {% endfor %}
@@ -352,6 +384,32 @@
                                 </ul>
                             </div>
                         </div>
+                        <br>
+                        <div class="card rounded">
+                            <div class="card-body">
+                                <h6 class="card-title">My Fanpage</h6>
+                                <ul>
+                                   
+                                    {% for page in fanpage %}
+                                    {% if user|striptags == page.author.username|striptags or user in page.members.all %}
+                                    
+                                    <div class="wrap_group">
+                                        <div class="group-circle">
+                                            
+                                            <img class="rounded-image" src="/media/{{ page.imgFanpage }}"
+                                                alt="Hình ảnh page">
+                                        </div>
+                                        <div class="wrap_nameGroup">
+                                            <a href="{% url 'app_social:fanpage' page.id %}">{{page.name}}</a>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    {% endif %}
+                                    
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <!-- Edit post -->
                     {% for post in posts %}
@@ -362,7 +420,7 @@
                             enctype="multipart/form-data" display="block" class="editForm" class="editForm">
                             {% csrf_token %}
                             <h1>Chỉnh sửa bài viết</h1>
-                            <input type="text" name="content" placeholder="Bạn đang nghỉ gì?">
+                            <input type="text" name="content" placeholder="Bạn đang nghĩ gì?">
                             <div class="layout-img">
                                 {% for image in post.images.all %}
                             <img class="img-edit" src="{{ image.image.url }}" alt="Img">
@@ -378,29 +436,38 @@
                                 </div>
                                 {% endfor %}
                             </div>
-                            <label  class="file-upload-label">
+
+                            <label class="file-upload-label">
                                 <input type="file" id="fileInput" name="images" multiple>
                                 <i class="fa-solid fa-circle-plus"></i>
                             </label>
-                            <label  class="file-upload-label">
-                                <input type="file" id="videoInput" name="videos" multiple>
+                            <label class="file-upload-label">
+                                <input type="file" id="fileInput" name="videos" multiple>
                                 <i class="fa-solid fa-video"></i>
+                            </label>
+                            <label class="file-upload-label">
+                                <select name="view_post" class="form-select" style="border:1px solid #ced4da; color: #6c757d;">
+                                    <option value="public" {% if post.view_post == 'public' %}selected{% endif %}>Public</option>
+                                    <option value="friends" {% if post.view_post == 'friends' %}selected{% endif %}>Friends</option>
+                                    <option value="onlyme" {% if post.view_post == 'onlyme' %}selected{% endif %}>Only me</option>
+                                </select>
                             </label>
                             <button type="submit">Chỉnh sửa</button>
                             <button type="reset" id="close-overlay" class="close-overlay">Thoát</button>
 
                         </form>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                
             </div>
 
         </div>
     </div>
     {% endblock %}
     {% block js_block %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{% static 'js/profile.js' %}"></script>
     <script>

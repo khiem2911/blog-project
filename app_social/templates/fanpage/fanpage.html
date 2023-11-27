@@ -1,0 +1,395 @@
+{% extends "header.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/profile.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% endblock %}
+
+{% block body_block %}
+
+<div class="container">
+    <div class="profile-page tx-13">
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="profile-header">
+                    <div class="cover">
+                        <div class="gray-shade"></div>
+                        <figure>
+                            {% if fanpage.imgFanpageCover %}
+                            <img src="/media/{{ fanpage.imgFanpageCover }}" class="img-fluid" alt="fanpage cover">
+                            {% else %}
+                            <img src="https://bootdey.com/img/Content/bg1.jpg" class="img-fluid" alt="profile cover">
+                            {% endif %}
+                        </figure>
+                        <div class="cover-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <img class="profile-pic" src="/media/{{ fanpage.imgFanpage }}" alt="profile" width="250px" height="100px">
+                                <span class="profile-name">{{fanpage.name}}</span>
+                            </div>
+                            <div class="d-none d-md-block">
+                                {% if user in fanpage.likes.all %}
+                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                    <i class="fa-solid fa-thumbs-up"></i> <a style="color: white; text-decoration:none;"
+                                        href="{% url 'app_social:unlike_fanpage' fanpage.id %}">UnLike({{fanpage.likes.count}})</a>
+                                </button>
+                                {% else %}
+                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                    <i class="fa-solid fa-thumbs-up"></i> <a style="color: white; text-decoration:none;"
+                                        href="{% url 'app_social:like_fanpage' fanpage.id %}">Like({{fanpage.likes.count}})</a>
+                                </button>
+                                {% endif %}
+                                {% if user|striptags != fanpage.author.username|striptags %}
+
+                                {% if user|striptags != fanpage.author.username|striptags and not user in fanpage.members.all %}
+                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                    <i class="fa-solid fa-heart"></i><a style="color: white; text-decoration:none;"
+                                        href="{% url 'app_social:join_fanpage' fanpage.id %}"> Follow</a>
+                                </button>
+                                
+                                {% else %}
+                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                    <i class="fa-solid fa-heart"></i><a style="color: white; text-decoration:none;"
+                                        href="{% url 'app_social:leave_fanpage' fanpage.id %}"> UnFollow</a>
+                                </button>
+                                {% endif %}
+                                
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-links">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row profile-body">
+
+            <div class="d-none d-md-block col-md-4 col-xl-4 left-wrapper">
+                <div class="card rounded">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h6 class="card-title mb-0">About</h6>
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Author:</label>
+                            <p class="text-muted">{{fanpage.author.last_name}} {{fanpage.author.first_name}} </p>
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Description:</label>
+                            <p class="text-muted">{{fanpage.description}}</p>
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Website:</label>
+                            <a href="{{userInfo.website}}" class="text-muted">http://google.com</a>
+                        </div>
+                    </div>
+                    <!-- Edit fanpage -->
+                    {% if user|striptags == fanpage.author.username|striptags %}
+
+                    <button id="btn-edit" class="btn btn-primary btn-icon-text btn-edit-profile">
+                        <i class="fa-solid fa-pen-to-square"></i> <a style="color: white; text-decoration:none;"
+                            > Edit Fangape</a>
+                    </button>
+                    {% comment %} form edit fanpage {% endcomment %}
+                   
+                    <form id="form-eidt-page" action="{% url 'app_social:edit_fanpage' %}" method="post" class="form-control" style="display: none;" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mt-3">
+                            <input type="hidden" name="page_id" value="{{fanpage.id}}">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Name Fangape:</label>
+                            <br>
+                            <input class="form-control" type="text" name="name_fanpage" value=" {{fanpage.name}}">
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Description:</label>
+                            <input class="form-control" type="text" name="description_fanpage" value="{{fanpage.description}}">
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Image Fanpage:</label>
+                            <input class="form-control" type="file" name="image_fanpage">
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 font-weight-bold mb-0 text-uppercase">Image Cover Fanpage:</label>
+                            <input class="form-control" type="file" name="img_cover_fanpage">
+                        </div>
+                        <br>
+                        <button type="submit" id="btn-edit" class="btn btn-primary btn-icon-text btn-edit-profile">
+                            <i class="fa-solid fa-pen-to-square"></i> <a style="color: white; text-decoration:none;"
+                                > Save</a>
+                        </button>
+                    </form>
+                    <br>
+                    <button class="btn btn-danger btn-icon-text btn-edit-profile">
+                        <i class="fa-solid fa-trash"></i> <a href="{% url 'app_social:delete_fanpage' fanpage.id %}" style="color: white; text-decoration:none; padding-bottom: 30px;">
+                            Delete Fangape</a>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 right-wrapper">
+                <div class="row">
+
+                {% if user|striptags == fanpage.author.username|striptags %}
+                
+                    {% comment %} Create post {% endcomment %}
+                        <div class="create-pots-profile">
+                            <div class="panel-body">
+                                    <div class="custom-alert">
+                                        <ul>
+                                            {% for message in messages %}
+                                                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                <form action="{% url 'app_social:create_post_fanpage' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="elements-form">
+                                        <input type="hidden" name="user" value="{{user}}">
+                                        <input type="hidden" name="page_id" value="{{fanpage.id}}">
+                                        <textarea class="form-control" name="content" rows="2" placeholder="What are you thinking?"></textarea>
+                                        <div class="mar-top clearfix">
+                                            <label class="file-upload-label">
+                                                <input type="file" id="fileInput" name="images" multiple>
+                                                <i class="fa-solid fa-circle-plus"></i>
+                                            </label>
+                                            <label class="file-upload-label">
+                                                <input type="file" id="videoInput" name="videos" multiple>
+                                                <i class="fa-solid fa-video"></i>
+                                            </label>
+                                            <button class="btn btn-sm btn-primary pull-right" type="submit"><i class="fa fa-pencil fa-fw"></i>
+                                                Share</button>
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                {% endif %}
+                {% if user in fanpage.members.all or user == fanpage.author %}
+                    {% comment %} Post fanpage {% endcomment %}
+                    {% for post in posts %}
+                    <div class="col-md-12 grid-margin">
+                        <div class="card rounded">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <img class="img-xs rounded-circle" src="/media/{{ post.fanpage.author.avatar }}" alt="">
+                                        <div class="ml-2">
+                                            
+                                            <p style="font-weight: bold;">{{ post.fanpage.author.last_name }} {{ post.fanpage.author.first_name }} </p>
+                                            <p class="tx-11 text-muted">{{ post.created_at }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown_">
+                                        <button onclick="myFunction({{ post.id }})" class="dropbtn edit-button"
+                                            data-post-id="{{ post.id }}">...</button>
+                                        <div id="myDropdown-{{ post.id }}" class="dropdown-content">
+                                            <a id="editButton" class="edit-link" href="#"
+                                                data-post-id="{{ post.id }}">Edit</a>
+                                            <a href="{% url 'app_social:delete_post_fanpage' post.id %}?page_id={{fanpage.id}}">Delete</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-3 tx-14">{{ post.content }}</p>
+                                    <div class="video-container">
+
+                                        {% for video in post.video.all %}
+                                        <div class="video-wrapper">
+                                            <video controls>
+                                                {% csrf_token %}
+                                                <source src="{{video.video.url}}" type="video/mp4">
+                                            </video>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="layout-img">
+                                        {% for image in post.images.all %}
+                                        <img class="img-post" src="{{ image.image.url }}" alt="Img post">
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer">
+                                    <div class="d-flex post-actions">
+                                        <!-- Like post -->
+                                        {% if post.liked == 'True' %}
+                                        
+                                        <a href="{% url 'app_social:like_post_fanpage' post.id %}?page_id={{fanpage.id}}"
+                                            class="btn-like text-primary text-opacity-50 text-decoration-none d-block p-2"
+                                            name="like_post_in_profile">
+                                            {{post.likes.count}}<i
+                                                class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
+                                        {% else %}
+                                        <a href="{% url 'app_social:like_post_fanpage' post.id %}?page_id={{fanpage.id}}"
+                                            class="btn-like text-body text-opacity-50 text-decoration-none d-block p-2"
+                                            name="like_post_in_profile">
+                                            {{post.likes.count}} <i
+                                                class="far fa-thumbs-up me-1 d-block d-sm-inline"></i> Likes </a>
+                                        {% endif %}
+                                        <a class="btn-comment" href="#" class="text-body text-opacity-50 text-decoration-none d-block p-2">
+                                            <i class="far fa-comment me-1 d-block d-sm-inline"></i> Comment </a>
+
+
+                                    </div>
+
+
+                                </div>
+                                <hr class="mb-3 mt-1 opacity-1" />
+
+                                {% if user.username %}
+                                {% for comment in comments %}
+                                {% if comment.post.id == post.id %}
+                                <div class="comment">
+                                    <div class="avatar">
+                                        <img src="{{comment.author.avatar.url}}" alt="User Avatar">
+                                    </div>
+                                    <div class="comment-content">
+                                        <h6>{{comment.author.last_name}} {{comment.author.first_name}}</h6>
+                                        <p class="content-comment">{{comment.content}}</p>
+                                        <span class="timestamp">{{comment.created_at}}</span>
+                                        <button class="reply-button">Reply</button>
+                                        <!-- Vùng trả lời ẩn -->
+                                        <div class="reply-form">
+                                            <form action="{% url 'app_social:comment_post_fanpage' post.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="page_id" value="{{fanpage.id}}">
+                                                <input type="hidden" name="comment_id" value="{{comment.id}}">
+                                                <textarea required class="reply-textarea" name="text"
+                                                    placeholder="Nhập bình luận của bạn"></textarea>
+                                                <button class="submit-reply" type="submit"
+                                                    name="reply_comment">Send</button>
+                                            </form>
+                                        </div>
+                                         {% comment %} Edit comment {% endcomment %}
+                                         {% if comment.author == user %}
+                                         <button class="edit-button">Edit</button>
+                                         <!-- Vùng trả lời ẩn -->
+                                         <div class="reply-form">
+                                             <form action="{% url 'app_social:comment_post_fanpage' post.id %}" method="post">
+                                                 {% csrf_token %}
+                                                 <input type="hidden" name="page_id" value="{{fanpage.id}}">
+                                                 <input type="hidden" name="comment_id" value="{{comment.id}}">
+                                                 <textarea required class="reply-textarea" name="content" placeholder="Nhập bình luận của bạn">{{comment.content}}</textarea>
+                                                 <button class="submit-reply" type="submit" name="edit_comment">Edit</button>
+                                             </form>
+                                         </div>
+                                        {% endif %}
+                                        {% if user == fanpage.author or comment.author == user %}
+                                        {% comment %} Delete comment {% endcomment %}
+                                        <a href="{% url 'app_social:deleteCommentFanpage' comment.id  %}?page_id={{fanpage.id}}"><button class="delete-button">Delete</button></a>
+                                        {% endif %}
+                                    </div>
+                                    
+                                </div>
+                                {% for reply in reply_comment_post %}
+                                {% if reply.comment.id == comment.id %}
+                                <div class="reply-comment">
+                                    <div class="avatar">
+                                        <img src="{{reply.author.avatar.url}}" alt="Reply User Avatar">
+                                    </div>
+                                    <div class="comment-content">
+                                        <h6>{{reply.author.last_name}} {{reply.author.first_name}}</h6>
+                                        <p class="content-comment">{{reply.text}}</p>
+                                        <span class="timestamp">{{reply.created_at}}</span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+
+
+                                {% endif %}
+                                {% endfor %}
+                                <div class="d-flex align-items-center" style="width: 100%;">
+                                    <img src="/media/{{ user.avatar }}" alt="" class="rounded-image" />
+                                    <div class="flex-fill ps-2">
+                                        <form action="{% url 'app_social:comment_post_fanpage' post.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="page_id" value="{{fanpage.id}}">
+                                            <div class="position-relative d-flex align-items-center">
+                                                <input required name="content" type="text"
+                                                    class="form-control rounded-pill bg-white bg-opacity-15"
+                                                    style="padding-right: 328px;" placeholder="Write a comment..." />
+                                                <button class="btn btn-primary btn_comment" type="submit"
+                                                    name="add_comment">Comment</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    {% endfor %}
+                </div>
+            </div>
+            {% for post in posts %}
+            <div class="overlay" id="overlay" style="display: none;"
+                data-post-id="{{ post.id }}">
+                <form action="{% url 'app_social:edit_post_fanpage' post.id %}" method="POST"
+                    enctype="multipart/form-data" display="block" class="editForm">
+                    {% csrf_token %}
+                    <h1>Chỉnh sửa bài viết</h1>
+                    <input type="hidden" name="page_id" value="{{fanpage.id}}">
+                    <input type="text" name="content" placeholder="Bạn đang nghỉ gì?">
+                    <div class="layout-img">
+                        {% for image in post.images.all %}
+                    <img class="img-edit" src="{{ image.image.url }}" alt="Img">
+                        {% endfor %}
+                    </div>
+                    <div class="layout-img">
+                        {% for video in post.video.all %}
+                        <div class="video-wrapper">
+                            <video controls>    
+                                {% csrf_token %}
+                                <source src="{{video.video.url}}" type="video/mp4">
+                            </video>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <label class="file-upload-label">
+                        <input type="file" id="fileInput" name="images" multiple>
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </label>
+                    <label class="file-upload-label">
+                        <input type="file" id="fileInput" name="videos" multiple>
+                        <i class="fa-solid fa-video"></i>
+                    </label>
+                    <button type="submit">Chỉnh sửa</button>
+                    <button type="reset" id="close-overlay" class="close-overlay">Thoát</button>
+
+                </form>
+            </div>
+            {% endfor %}
+
+            {% endif %}
+
+        </div>
+    </div>
+
+
+    {% endblock %}
+    {% block js_block %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{% static 'js/profile.js' %}"></script>
+    <script>
+        const form = document.querySelector('#form-eidt-page')
+        const btn_edit = document.querySelector('#btn-edit')
+
+        $(document).ready(function(){
+            $("#btn-edit").click(function(){
+              $("#form-eidt-page").toggle();
+            });
+          });
+
+
+    </script>
+    {% endblock %}

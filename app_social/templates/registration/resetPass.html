@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đổi mật khẩu</title>
+    <link rel="stylesheet" href="{% static "css/registration.css" %}">
+</head>
+<body>
+<h1>
+    Password change
+</h1>
+<form method="post">
+  {% csrf_token %}
+  <label style="display: block;" for="email">OTP</label>
+  <input style="padding: 0.5rem; margin: 1rem 0rem; width: 100%;" placeholder="Nhập email của bạn" required type="email" name="email">
+  <input type="submit" class="btn btn-primary" value="Lấy mã otp">
+</form>
+</body>
+</html>
+<script>
+    window.onload = function() {
+        {% if message %}
+        alert("{{ message }}");  
+         {% endif %}
+    };
+</script>
