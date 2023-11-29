@@ -276,7 +276,7 @@ def editProfile(request,user_id):
             user.avatar = request.FILES['avatar'] 
         user.save()
         return redirect('app_social:profile')
-    return render(request,"editProfile.html",{'user': user})
+    return render(request,"editprofile.html",{'user': user})
 
 def update_avatar(request,user_id):
     user = get_object_or_404(CustomUser, id=user_id)
