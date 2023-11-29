@@ -346,6 +346,7 @@ def group(request):
         if(form.is_valid()):
             group = form.save(commit=False)
             group.created_by = request.user
+            
             group.save()
             group.members.add(request.user)
             return redirect('app_social:profile')
@@ -666,27 +667,30 @@ def follow_user(request, user_id):
     return redirect('app_social:user_profile', username=user_to_follow.username)
 
 def result_search(request):
-    value = request.GET.get("value_search")
-    print(value)
-    user = request.user
-    all_groups = Group.objects.exclude(members=user)
-    posts = Post.objects.filter(content__contains=value).order_by("-created_at")
-    comments = CommentPost.objects.order_by('-created_at')
-    reply_comment_post = ReplyCommentPost.objects.order_by('-created_at')
-    suggested_friends = CustomUser.objects.exclude(id=user.id)
-    sent_friend_requests = FriendRequest.objects.filter(from_user=user, is_accepted=False).values_list('to_user', flat=True)
-    suggested_friends = suggested_friends.exclude(id__in=sent_friend_requests)
-    user_friends = Friendship.objects.filter(user1=user).values_list('user2', flat=True)
-    suggested_friends = suggested_friends.exclude(id__in=user_friends)
-    context={
-        'posts': posts,
-        'comments': comments,
-        'reply_comment_post': reply_comment_post,
-        'all_groups' :  all_groups,
-        'suggested_friends' :  suggested_friends
-    }
-    
-    return render(request, "search.html",context )
+    if request.user.is_authenticated:
+        value = request.GET.get("value_search")
+        print(value)
+        user = request.user
+        all_groups = Group.objects.exclude(members=user)
+        posts = Post.objects.filter(content__contains=value).order_by("-created_at")
+        comments = CommentPost.objects.order_by('-created_at')
+        reply_comment_post = ReplyCommentPost.objects.order_by('-created_at')
+        suggested_friends = CustomUser.objects.exclude(id=user.id)
+        sent_friend_requests = FriendRequest.objects.filter(from_user=user, is_accepted=False).values_list('to_user', flat=True)
+        suggested_friends = suggested_friends.exclude(id__in=sent_friend_requests)
+        user_friends = Friendship.objects.filter(user1=user).values_list('user2', flat=True)
+        suggested_friends = suggested_friends.exclude(id__in=user_friends)
+        context={
+            'posts': posts,
+            'comments': comments,
+            'reply_comment_post': reply_comment_post,
+            'all_groups' :  all_groups,
+            'suggested_friends' :  suggested_friends
+        }
+        
+        return render(request, "search.html",context )
+    else :
+        return redirect('app_social:login')
 
 def comment_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -1025,7 +1029,7 @@ def deleteCommentFanpage(request, comment_id):
 def send_otp_email(request):
         if request.method == 'POST':
             email = request.POST['email']
-            user = CustomUser.objects.get(email=email)
+            user =  CustomUser.objects.filter(email=email).exists()
             if user:
                 otp = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
                 subject = 'Mã OTP cho việc reset mật khẩu'

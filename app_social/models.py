@@ -120,7 +120,7 @@ class Group(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name='groups_created')
     created_at = models.DateTimeField(auto_now_add=True)
     imgcover = models.ImageField(upload_to='imgcover/', blank=True, null=True)
-    group_picture = models.ImageField(upload_to='group_pics/', blank=True)
+    group_picture = models.ImageField(upload_to='group_pics/', blank=True,default='/group_pics/logo2.png')
 
     def __str__(self):
         return self.name
