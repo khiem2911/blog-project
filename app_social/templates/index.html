@@ -245,7 +245,6 @@
                                     <span class="timestamp">{{reply.created_at}}</span>
                                 </div>
                                 {% if reply.author == user %}
-                             
                                 <button class="edit-button">Edit</button>
                                 <!-- Vùng trả lời ẩn -->
                                 <div class="reply-form">
@@ -262,7 +261,6 @@
                                {% comment %} Delete comment {% endcomment %}
                                <a href="{% url 'app_social:deleteReplyCommentPost' reply.id  %}"><button class="delete-button">Delete</button></a>
                                {% endif %}
-                           
                             </div>
                             {% endif %}
                         {% endfor %}

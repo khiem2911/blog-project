@@ -28,6 +28,8 @@ urlpatterns = [
     path('create_post/', views.create_post, name='create_post'),
     path('delete_post/<int:post_id>/', views.delete_post, name='delete_post'),
     path('edit_post/<int:post_id>/', views.edit_post, name='edit_post'),
+    path('edit_Userpost/<int:post_id>/', views.edit_OnUserpost, name='edit_OnUserpost'),
+
     path('edit_Grouppost/<int:post_id>/', views.edit_Grouppost, name='edit_Grouppost'),
     path('follow/<int:user_id>/', views.follow_user, name='follow_user'),
     path('profile/allFollwers', views.allFollowers, name='All_followers'),

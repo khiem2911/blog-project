@@ -57,12 +57,11 @@ window.addEventListener('load', function() {
 document.querySelector('#chat-message-submit').onclick = function(e){
     const message_input = document.querySelector('#message_input');
     const message = message_input.value;
-    
+
     socket.send(JSON.stringify({
         'message':message,
         'username':message_username,
-        'receiver':receiver,
-        
+        'receiver':receiver
     }));
 
     message_input.value = '';

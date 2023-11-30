@@ -201,8 +201,10 @@
                                         <button onclick="myFunction({{ post.id }})" class="dropbtn edit-button"
                                             data-post-id="{{ post.id }}">...</button>
                                         <div id="myDropdown-{{ post.id }}" class="dropdown-content">
+                                            {% if post.author == request.user %}
                                             <a id="editButton" class="edit-link" href="#"
                                                 data-post-id="{{ post.id }}">Edit</a>
+                                                {% endif %}
                                             <a href="{% url 'app_social:delete_post' post.id %}">Delete</a>
                                         </div>
                                     </div>
@@ -312,14 +314,9 @@
                                         <p class="content-comment">{{reply.text}}</p>
                                         <span class="timestamp">{{reply.created_at}}</span>
                                     </div>
-                                    
                                     {% if reply.author == user %}
-                                   
                                     <button class="edit-button">Edit</button>
                                     <!-- Vùng trả lời ẩn -->
-                                   
-
-                                   
                                     <div class="reply-form">
                                         <form action="{% url 'app_social:commentReplyPost' post.id %}" method="post">
                                             {% csrf_token %}
@@ -334,7 +331,6 @@
                                    {% comment %} Delete comment {% endcomment %}
                                    <a href="{% url 'app_social:deleteReplyCommentPost' reply.id  %}?return=p"><button class="delete-button">Delete</button></a>
                                    {% endif %}
-                                
                                 </div>
                                 {% endif %}
                                 {% endfor %}

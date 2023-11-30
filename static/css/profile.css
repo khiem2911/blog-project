@@ -23,6 +23,22 @@ body{
     color: #68696b;
     text-decoration: none;
 }
+.btn_friend{
+    border: none;
+    background-color: gray;
+    color: white;
+    padding: 0.25rem;
+    border-radius: 4px;
+    width: 7rem;
+  }
+
+.btn_add{
+    border: none;
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+}   
 
 .profile-page .profile-header .cover {
     position: relative;

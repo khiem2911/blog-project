@@ -22,10 +22,8 @@ def write_post(request):
             if request.POST['content'] or request.FILES.getlist('images') or  request.FILES.getlist('videos'):
                 username = request.POST.get('otherUser-name')
                 content = request.POST.get('content')
-                print(request.POST)
                 other_user = get_object_or_404(CustomUser, username=username)
                 post = Post(author=request.user,profile=other_user,content = content)
-                print(post)
                 post.save()
                 if request.FILES.getlist('images'):
                     images = request.FILES.getlist('images')
@@ -129,7 +127,6 @@ def user_profile_view(request,username):
         if(custom_user==request.user):
             return redirect('app_social:profile')
         posts = Post.objects.filter(author=custom_user,profile__isnull=True).union(Post.objects.filter(profile=custom_user)).order_by('-created_at')
-        print(posts)
         for post in posts.all():
             if request.user in post.likes.all():
                 post.liked = True
@@ -279,7 +276,7 @@ def editProfile(request,user_id):
             user.avatar = request.FILES['avatar'] 
         user.save()
         return redirect('app_social:profile')
-    return render(request,"editprofile.html",{'user': user})
+    return render(request,"editProfile.html",{'user': user})
 
 def update_avatar(request,user_id):
     user = get_object_or_404(CustomUser, id=user_id)
@@ -494,7 +491,7 @@ def send_friend_request(request, friend_username):
             messages.error(request, 'Người bạn không tồn tại.')
             return redirect('app_social:index')  
 
-        existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=friend, is_accepted=False)
+        existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=friend, is_accepted=False,rejected = False)
         if existing_request.exists():
             messages.warning(request, 'Bạn đã gửi lời mời kết bạn tới người này.')
             return redirect('app_social:index')  
@@ -585,15 +582,14 @@ def delete_post(request,post_id):
 def edit_post(request,post_id):
     post = get_object_or_404(Post, id=post_id)
     image = request.FILES.getlist('images')
-    print(request.POST)
+    print(image)
     if request.method == 'POST':
         if request.POST.get('content') or request.FILES.getlist('videos') or request.FILES.getlist('images') or request.POST.get('view_post'):
-                if request.POST['content'] != " ":
-                    print('ok')
+                if request.POST['content'] !="":
                     post.content = request.POST['content']
-                view_post_value = request.POST.get('view_post')
-                if view_post_value:
-                    post.view_post = view_post_value
+                view_post = request.POST.get('view_post')
+                if view_post:
+                    post.view_post = request.POST.get('view_post')
                 if request.FILES.getlist('images'):
                     images = request.FILES.getlist('images')
                     for old_image in post.images.all():
@@ -619,6 +615,41 @@ def edit_post(request,post_id):
         return redirect('app_social:profile')
     
 
+def edit_OnUserpost(request,post_id):
+    post = get_object_or_404(Post, id=post_id)
+    image = request.FILES.getlist('images')
+    print(image)
+    if request.method == 'POST':
+        username = request.POST['username']
+        if request.POST.get('content') or request.FILES.getlist('videos') or request.FILES.getlist('images') or request.POST.get('view_post'):
+                if request.POST['content'] !="":
+                    post.content = request.POST['content']
+                view_post = request.POST.get('view_post')
+                if view_post:
+                    post.view_post = request.POST.get('view_post')
+                if request.FILES.getlist('images'):
+                    images = request.FILES.getlist('images')
+                    for old_image in post.images.all():
+                        old_image.delete()
+                    for image in images:
+                        new_image = Image(image=image)  
+                        new_image.save()
+                        post.images.add(new_image)
+                
+                if request.FILES.getlist('videos'):
+                    videos = request.FILES.getlist('videos')
+                    for old_video in post.video.all():
+                        old_video.delete()
+                    for video in videos:
+                        new_video = Video(video=video)  
+                        new_video.save() 
+                        post.video.add(new_video)
+                post.save()
+                return redirect('app_social:user_profile',username=username)
+        else:
+         return redirect('app_social:user_profile',username=username)
+   
+    
 
 
 def edit_Grouppost(request,post_id):
@@ -960,6 +991,7 @@ def leave_fanpage(request, page_id):
 
             
 def commentReplyPost(request,post_id):
+    post = get_object_or_404(Post,id = post_id)
     profile = request.POST['return_profile']
     if request.method == 'POST':
         if 'edit_commentReply' in request.POST:
@@ -968,9 +1000,9 @@ def commentReplyPost(request,post_id):
             comment.text = request.POST['content']
             comment.save()
             if profile:
-                return redirect('app_social:profile')
-            else:
                 return redirect('app_social:index')
+            else:
+                return redirect('app_social:profile')
 
 
 def deleteReplyCommentPost(request, comment_id):
