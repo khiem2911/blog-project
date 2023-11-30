@@ -30,7 +30,7 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         message = data['message']
         username = data['username']
         receiver = data['receiver']
-
+      
         await self.save_message(username, self.room_group_name, message, receiver)
         await self.channel_layer.group_send(
             self.room_group_name,

@@ -122,8 +122,7 @@
                     </form>
                     <div class="row">
                         {% for post in posts %}
-                        {% if post.profile_id is None %}
-
+                      
                         {% if post.view_post == 'public' and post.view_post != 'onlyme' %}
                         <div class="col-md-12 grid-margin">
                             <div class="card rounded">
@@ -437,7 +436,7 @@
                             </div>
                         </div>
                         {% endif %}   
-                        {% endif %}       
+                       
     
                         <div class="overlay" id="overlay" style="display: none;" overflow-y="auto"
                         data-post-id="{{ post.id }}">

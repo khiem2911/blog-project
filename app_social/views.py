@@ -22,8 +22,10 @@ def write_post(request):
             if request.POST['content'] or request.FILES.getlist('images') or  request.FILES.getlist('videos'):
                 username = request.POST.get('otherUser-name')
                 content = request.POST.get('content')
+                print(request.POST)
                 other_user = get_object_or_404(CustomUser, username=username)
                 post = Post(author=request.user,profile=other_user,content = content)
+                print(post)
                 post.save()
                 if request.FILES.getlist('images'):
                     images = request.FILES.getlist('images')
@@ -127,6 +129,7 @@ def user_profile_view(request,username):
         if(custom_user==request.user):
             return redirect('app_social:profile')
         posts = Post.objects.filter(author=custom_user,profile__isnull=True).union(Post.objects.filter(profile=custom_user)).order_by('-created_at')
+        print(posts)
         for post in posts.all():
             if request.user in post.likes.all():
                 post.liked = True
@@ -582,12 +585,15 @@ def delete_post(request,post_id):
 def edit_post(request,post_id):
     post = get_object_or_404(Post, id=post_id)
     image = request.FILES.getlist('images')
-    print(image)
+    print(request.POST)
     if request.method == 'POST':
         if request.POST.get('content') or request.FILES.getlist('videos') or request.FILES.getlist('images') or request.POST.get('view_post'):
-                if request.POST['content'] !="":
+                if request.POST['content'] != " ":
+                    print('ok')
                     post.content = request.POST['content']
-                post.view_post = request.POST.get('view_post')
+                view_post_value = request.POST.get('view_post')
+                if view_post_value:
+                    post.view_post = view_post_value
                 if request.FILES.getlist('images'):
                     images = request.FILES.getlist('images')
                     for old_image in post.images.all():
@@ -954,7 +960,6 @@ def leave_fanpage(request, page_id):
 
             
 def commentReplyPost(request,post_id):
-    post = get_object_or_404(Post,id = post_id)
     profile = request.POST['return_profile']
     if request.method == 'POST':
         if 'edit_commentReply' in request.POST:
@@ -963,19 +968,19 @@ def commentReplyPost(request,post_id):
             comment.text = request.POST['content']
             comment.save()
             if profile:
-                return redirect('app_social:index')
-            else:
                 return redirect('app_social:profile')
+            else:
+                return redirect('app_social:index')
 
 
 def deleteReplyCommentPost(request, comment_id):
     comment = ReplyCommentPost.objects.get(id=comment_id)
     comment.delete()
-    profile = request.GET.get['return']
+    profile = request.GET.get('return')
     if profile:
-        return redirect('app_social:index')
-    else:
         return redirect('app_social:profile')
+    else:
+        return redirect('app_social:index')
 
 def comment_GroupReplypost(request, post_id):
     group_id = request.POST['return_group']
