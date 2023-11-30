@@ -312,9 +312,14 @@
                                         <p class="content-comment">{{reply.text}}</p>
                                         <span class="timestamp">{{reply.created_at}}</span>
                                     </div>
-                                    {% if comment.author == user %}
+                                    
+                                    {% if reply.author == user %}
+                                   
                                     <button class="edit-button">Edit</button>
                                     <!-- Vùng trả lời ẩn -->
+                                   
+
+                                   
                                     <div class="reply-form">
                                         <form action="{% url 'app_social:commentReplyPost' post.id %}" method="post">
                                             {% csrf_token %}
@@ -325,10 +330,11 @@
                                         </form>
                                     </div>
                                    {% endif %}
-                                   {% if post.author == user or comment.author == user %}
+                                   {% if post.author == user or reply.author == user %}
                                    {% comment %} Delete comment {% endcomment %}
                                    <a href="{% url 'app_social:deleteReplyCommentPost' reply.id  %}?return=p"><button class="delete-button">Delete</button></a>
                                    {% endif %}
+                                
                                 </div>
                                 {% endif %}
                                 {% endfor %}
